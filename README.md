@@ -11,11 +11,10 @@ npm install aerosync-react-native-sdk
 ## Usage
 
 ```js
-import { multiply } from 'aerosync-react-native-sdk';
-
+import BankLink  from 'aerosync-react-native-sdk';
 // ...
 
-const result = await multiply(3, 7);
+
 ```
 
 ## Contributing
@@ -28,4 +27,4 @@ MIT
 
 ---
 
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+This project is licensed under the MIT License.
