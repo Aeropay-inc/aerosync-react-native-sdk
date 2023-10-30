@@ -16,7 +16,7 @@ import { useState } from 'react';
  * @params {json} - style: Webview css properties
  * @returns <view> - webview
  */
-export default function AerosyncWebView({
+export default function BankLink({
   token,
   environment,
   deeplink,
