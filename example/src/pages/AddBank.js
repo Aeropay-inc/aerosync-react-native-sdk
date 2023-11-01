@@ -1,6 +1,5 @@
 /**
- * AeroSync UI AddBank
- * Integrate AeroSync WebView
+ * Integrate AeroSync UI AddBank
  */
 import BankLink from 'aerosync-react-native-sdk';
 
@@ -19,7 +18,6 @@ export default function AddBank({ navigation }) {
 
   // close webview
   onClose = () => {
-    let response = {};
     // open new screen and remove previous stack screen
     // navigate to the screen to perform steps after account
     // has been successfully linked
