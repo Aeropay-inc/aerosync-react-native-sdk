@@ -1,6 +1,6 @@
-import { View, Linking } from 'react-native';
+import { View, Linking, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { useState } from 'react';
+import { React, useState } from 'react';
 
 /**
  * AeroSync UI Web View
@@ -35,6 +35,16 @@ export default function BankLink({
     }
   });
 
+  // stylesheet
+  const styles = StyleSheet.create({
+    container: {
+      height: style.height ? style.height : '100%',
+      width: style.width ? style.width : '100%',
+      backgroundColor: style.bgColor ? style.bgColor : '#FFFFFF',
+      opacity: style.opacity ? style.opacity : 1,
+    },
+  });
+
   const [source, setSource] = useState(
     deeplink && consumerId
       ? `${env[environment]}/?token=${token}&deeplink=${deeplink}&consumerId=${consumerId}`
@@ -66,14 +76,7 @@ export default function BankLink({
   };
 
   return (
-    <View
-      style={{
-        height: style.height ? style.height : '100%',
-        width: style.width ? style.width : '100%',
-        backgroundColor: style.bgColor ? style.bgColor : '#FFFFFF',
-        opacity: style.opacity ? style.opacity : 1,
-      }}
-    >
+    <View style={[styles.container]}>
       <WebView
         source={{
           uri: source,
@@ -85,7 +88,7 @@ export default function BankLink({
               onSuccess ? onSuccess(r.payload) : false;
               break;
             case 'widgetClose':
-              onClose();
+              onClose() ? onClose() : false;
               break;
             case 'widgetPageLoaded':
               onEvent ? onEvent(r.payload) : false;
