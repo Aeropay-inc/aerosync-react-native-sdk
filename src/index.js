@@ -14,6 +14,9 @@ import { React, useState } from 'react';
  * @params {function} - onError: callback function
  * @params {string} - deeplink: React Native deeplink
  * @params {json} - style: Webview css properties
+ * @params {boolean} - handleMFA: handle additional MFA if true
+ * @params {string} - jobId: unique identifier for current job
+ * @params {string} - userId: unique identifier for user
  * @returns <view> - webview
  */
 export default function BankLink({
@@ -27,6 +30,9 @@ export default function BankLink({
   onLoad,
   onError,
   style,
+  handleMFA,
+  jobId,
+  userId,
 }) {
   Linking.addEventListener('url', (event) => {
     if (event !== null) {
@@ -45,15 +51,18 @@ export default function BankLink({
     },
   });
 
-  const [source, setSource] = useState(
-    deeplink && consumerId
-      ? `${env[environment]}/?token=${token}&deeplink=${deeplink}&consumerId=${consumerId}`
-      : deeplink
-      ? `${env[environment]}/?token=${token}&deeplink=${deeplink}`
-      : consumerId
-      ? `${env[environment]}/?token=${token}&consumerId=${consumerId}`
-      : `${env[environment]}/?token=${token}`
-  );
+  let base_url = `${env[environment]}/?token=${token}`;
+  if (deeplink) {
+    base_url = `${base_url}&deeplink=${deeplink}`;
+  }
+  if (consumerId) {
+    base_url = `${base_url}&consumerId=${consumerId}`;
+  }
+  if (handleMFA) {
+    base_url = `${base_url}&handleMFA=${handleMFA}&jobId=${jobId}&userId=${userId}`;
+  }
+
+  const [source, setSource] = useState(base_url);
 
   const handleNavigationStateChange = (NavState) => {
     const { url } = NavState;
@@ -122,6 +131,7 @@ export default function BankLink({
 
 // environment constants
 const env = {
+  dev: 'https://dev.aerosync.com',
   staging: 'https://staging.aerosync.com',
   production: 'https://www.aerosync.com',
 };
