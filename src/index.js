@@ -1,6 +1,6 @@
-import { View, Linking, StyleSheet } from 'react-native';
+import { View, Linking, StyleSheet, BackHandler } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 
 /**
  * AeroSync UI Web View
@@ -61,11 +61,36 @@ export default function BankLink({
   if (handleMFA) {
     base_url = `${base_url}&handleMFA=${handleMFA}&jobId=${jobId}&userId=${userId}`;
   }
-
   const [source, setSource] = useState(base_url);
+  let canGoBack = false;
+  let widgetClosed = false;
+
+  useEffect(() => {
+    const onBackPress = () => {
+      /**
+       * When true is returned the event will not be bubbled up
+       * & no other back action will execute
+       */
+      if (canGoBack && this.webView) {
+        this.webView.goBack();
+        return true;
+      }
+    };
+
+    // the backhandler API detects hardware button presses for back navigatio
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () => {
+      if (!widgetClosed) {
+        onClose();
+      }
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    };
+  }, [onClose, widgetClosed, canGoBack]);
 
   const handleNavigationStateChange = (NavState) => {
     const { url } = NavState;
+    canGoBack = NavState.canGoBack;
     if (
       url.includes('aerosync.com/redirect') &&
       !url.includes('&token=') &&
@@ -97,6 +122,7 @@ export default function BankLink({
               onSuccess ? onSuccess(r.payload) : false;
               break;
             case 'widgetClose':
+              widgetClosed = true;
               onClose() ? onClose() : false;
               break;
             case 'widgetPageLoaded':
