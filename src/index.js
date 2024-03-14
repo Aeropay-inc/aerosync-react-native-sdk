@@ -119,6 +119,7 @@ export default function BankLink({
           const r = JSON.parse(event.nativeEvent.data);
           switch (r.type) {
             case 'pageSuccess':
+              widgetClosed = true;
               onSuccess ? onSuccess(r.payload) : false;
               break;
             case 'widgetClose':
