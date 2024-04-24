@@ -18,5 +18,5 @@ export interface Options {
     width: DimensionValue;
     height: DimensionValue;
   };
-  environment: 'staging' | 'dev' | 'production';
+  environment: string;
 }

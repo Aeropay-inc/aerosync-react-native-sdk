@@ -5,18 +5,29 @@
  * @format
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import BankLink from 'aerosync-react-native-sdk';
-import {SafeAreaView, useColorScheme} from 'react-native';
-
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import DropDownPicker from 'react-native-dropdown-picker';
+import {
+  StyleSheet,
+  SafeAreaView,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const [token, settoken] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [consumerId, setconsumerId] = useState('');
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('staging');
+  const [items, setItems] = useState([
+    {label: 'DEV', value: 'dev'},
+    {label: 'STAGING', value: 'staging'},
+    {label: 'PRODUCTION', value: 'production'},
+  ]);
 
   const onLoad = () => {
     console.log('onLoad');
@@ -24,10 +35,12 @@ function App(): React.JSX.Element {
 
   const onClose = () => {
     console.log('onClose');
+    setIsSubmitted(false);
   };
 
   const onSuccess = (event: object) => {
     console.log('onSuccess', event);
+    setIsSubmitted(false);
   };
 
   const onEvent = (event: object) => {
@@ -38,26 +51,126 @@ function App(): React.JSX.Element {
     console.log('onError', event);
   };
 
-  return (
-    <SafeAreaView>
-      <BankLink
-        token=""
-        environment="staging"
-        onError={onError}
-        onClose={onClose}
-        onEvent={onEvent}
-        onSuccess={onSuccess}
-        onLoad={onLoad}
-        deeplink="testaerosyncsample://"
-        consumerId=""
-        style={{
-          width: '100%',
-          height: '100%',
-          opacity: 1,
-          bgColor: '#FFFFFF',
-        }}></BankLink>
-    </SafeAreaView>
-  );
+  if (isSubmitted) {
+    return (
+      <SafeAreaView>
+        <BankLink
+          token={token}
+          environment={value}
+          onError={onError}
+          onClose={onClose}
+          onEvent={onEvent}
+          onSuccess={onSuccess}
+          onLoad={onLoad}
+          deeplink="testaerosyncsample://"
+          consumerId={consumerId}
+          style={{
+            width: '100%',
+            height: '100%',
+            opacity: 1,
+            bgColor: '#FFFFFF',
+          }}></BankLink>
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView>
+        <View style={styles.container}>
+          <TouchableOpacity>
+            <Text style={styles.HomeTitle}>AeroSync UI Mock App</Text>
+          </TouchableOpacity>
+          <View style={styles.dropdownView}>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              placeholder="select environment*"
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Enter Aerosync token*"
+              onChangeText={token => settoken(token)}
+              placeholderTextColor="#003f5c"
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Enter  consumerId (optional)"
+              onChangeText={consumerId => setconsumerId(consumerId)}
+              placeholderTextColor="#003f5c"
+            />
+          </View>
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={() => setIsSubmitted(true)}>
+            <Text style={styles.loginText}>Launch Aerosync widget</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    height: '100%',
+  },
+  image: {
+    marginBottom: 40,
+    width: '25%',
+    height: '15%',
+  },
+  inputView: {
+    borderWidth: 1,
+    borderRadius: 5,
+    width: '70%',
+    height: 45,
+    marginBottom: 20,
+  },
+  dropdownView: {
+    width: '70%',
+    height: 45,
+    marginBottom: 20,
+    zIndex: 100,
+  },
+  TextInput: {
+    color: 'black',
+    height: 50,
+    flex: 1,
+    marginLeft: 20,
+  },
+  forgot_button: {
+    height: 30,
+    marginBottom: 30,
+  },
+  HomeTitle: {
+    height: 30,
+    marginTop: 60,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  loginBtn: {
+    width: '80%',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 40,
+    backgroundColor: '#24c3d2',
+  },
+  loginText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+});
 export default App;
