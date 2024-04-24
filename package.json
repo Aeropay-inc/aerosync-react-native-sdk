@@ -1,6 +1,6 @@
 {
   "name": "aerosync-react-native-sdk",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "This React Native SDK provides an interface to load Aerosync-UI in React Native application. Securely link your bank account through your bank’s website. Log in with a fast, secure, and tokenized connection. Your information is never shared or sold.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -55,7 +55,7 @@
     "@react-native/eslint-config": "^0.72.2",
     "@release-it/conventional-changelog": "^5.0.0",
     "@types/jest": "^28.1.2",
-    "@types/react": "~17.0.21",
+    "@types/react": "~18.2.0",
     "@types/react-native": "0.70.0",
     "commitlint": "^17.0.2",
     "del-cli": "^5.0.0",
