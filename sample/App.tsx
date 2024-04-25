@@ -6,7 +6,10 @@
  */
 
 import React, {useState} from 'react';
-import BankLink from 'aerosync-react-native-sdk';
+import BankLink, {
+  SuccessEventType,
+  WidgetEventType,
+} from 'aerosync-react-native-sdk';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
   StyleSheet,
@@ -38,16 +41,16 @@ function App(): React.JSX.Element {
     setIsSubmitted(false);
   };
 
-  const onSuccess = (event: object) => {
+  const onSuccess = (event: SuccessEventType) => {
     console.log('onSuccess', event);
     setIsSubmitted(false);
   };
 
-  const onEvent = (event: object) => {
+  const onEvent = (event: WidgetEventType) => {
     console.log('onEvent', event);
   };
 
-  const onError = (event: object) => {
+  const onError = (event: string) => {
     console.log('onError', event);
   };
 
