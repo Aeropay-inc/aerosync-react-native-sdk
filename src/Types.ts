@@ -7,7 +7,7 @@ export interface Options {
   onEvent: (event: WidgetEventType) => void;
   onError: (event: string) => void;
   token: string;
-  consumerId?: string;
+  configurationId?: string;
   deeplink?: string;
   handleMFA?: boolean;
   jobId?: string;
@@ -23,9 +23,9 @@ export interface Options {
 
 export interface SuccessEventType {
   user_id: string;
-  user_password: string;
-  ClientName: string;
-  FILoginAcctId: string | Number;
+  connection_id: string;
+  client_name: string;
+  aeropass_user_uuid: string;
 }
 
 export interface WidgetEventType {

@@ -19,8 +19,8 @@ export default function BankLink(options: Options) {
   if (options.deeplink) {
     base_url = `${base_url}&deeplink=${options.deeplink}`;
   }
-  if (options.consumerId) {
-    base_url = `${base_url}&consumerId=${options.consumerId}`;
+  if (options.configurationId) {
+    base_url = `${base_url}&consumerId=${options.configurationId}`;
   }
   if (options.handleMFA) {
     base_url = `${base_url}&handleMFA=${options.handleMFA}&jobId=${options.jobId}&userId=${options.userId}`;
@@ -112,7 +112,7 @@ export default function BankLink(options: Options) {
 
 // environment constants
 const env: { [key: string]: string } = {
-  dev: 'https://dev.aerosync.com',
+  dev: 'https://qa.aerosync.com',
   staging: 'https://staging.aerosync.com',
   production: 'https://www.aerosync.com',
 };
