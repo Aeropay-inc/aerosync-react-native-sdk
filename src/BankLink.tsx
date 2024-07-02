@@ -22,6 +22,9 @@ export default function BankLink(options: Options) {
   if (options.configurationId) {
     base_url = `${base_url}&consumerId=${options.configurationId}`;
   }
+  if (options.aeropassUserUuid) {
+    base_url = `${base_url}&aeropassUserUuid=${options.aeropassUserUuid}`;
+  }
   if (options.handleMFA) {
     base_url = `${base_url}&handleMFA=${options.handleMFA}&jobId=${options.jobId}&userId=${options.userId}`;
   }

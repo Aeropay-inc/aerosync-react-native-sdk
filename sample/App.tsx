@@ -24,6 +24,7 @@ function App(): React.JSX.Element {
   const [token, settoken] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [configurationId, setConfigurationId] = useState('');
+  const [aeropassUserUuid, setAeropassUserUuid] = useState('');
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('staging');
   const [items, setItems] = useState([
@@ -67,6 +68,7 @@ function App(): React.JSX.Element {
           onLoad={onLoad}
           deeplink="testaerosyncsample://"
           configurationId={configurationId}
+          aeropassUserUuid={aeropassUserUuid}
           style={{
             width: '100%',
             height: '100%',
@@ -107,6 +109,16 @@ function App(): React.JSX.Element {
               placeholder="Enter  configurationId (optional)"
               onChangeText={configurationId =>
                 setConfigurationId(configurationId)
+              }
+              placeholderTextColor="#003f5c"
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Enter  aeropassUserUuid (optional)"
+              onChangeText={aeropassUserUuid =>
+                setAeropassUserUuid(aeropassUserUuid)
               }
               placeholderTextColor="#003f5c"
             />
