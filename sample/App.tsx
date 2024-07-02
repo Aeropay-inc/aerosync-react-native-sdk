@@ -28,6 +28,7 @@ function App(): React.JSX.Element {
   const [aeroPassUserUuid, setAeroPassUserUuid] = useState('');
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('staging');
+  const [output, setoutput] = useState('');
   const [items, setItems] = useState([
     {label: 'DEV', value: 'dev'},
     {label: 'STAGING', value: 'staging'},
@@ -44,6 +45,7 @@ function App(): React.JSX.Element {
   };
 
   const onSuccess = (event: SuccessEventType) => {
+    setoutput(JSON.stringify(event));
     console.log('onSuccess', event);
     setIsSubmitted(false);
   };
@@ -83,7 +85,7 @@ function App(): React.JSX.Element {
       <SafeAreaView>
         <View style={styles.container}>
           <TouchableOpacity>
-            <Text style={styles.HomeTitle}>AeroSync UI Mock App</Text>
+            <Text style={styles.OutputTitle}>{output}</Text>
           </TouchableOpacity>
           <View style={styles.dropdownView}>
             <DropDownPicker
@@ -117,7 +119,7 @@ function App(): React.JSX.Element {
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
-              placeholder="Enter  aeroPassUserUuid (optional)"
+              placeholder="Enter aeroPassUserUuid (optional)"
               onChangeText={aeroPassUserUuid =>
                 setAeroPassUserUuid(aeroPassUserUuid)
               }
@@ -170,11 +172,9 @@ const styles = StyleSheet.create({
     height: 30,
     marginBottom: 30,
   },
-  HomeTitle: {
-    height: 30,
-    marginTop: 60,
-    fontSize: 20,
-    fontWeight: 'bold',
+  OutputTitle: {
+    color: 'black',
+    height: 100,
   },
   loginBtn: {
     width: '80%',
