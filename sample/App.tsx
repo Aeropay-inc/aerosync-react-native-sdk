@@ -18,7 +18,6 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 
 function App(): React.JSX.Element {
