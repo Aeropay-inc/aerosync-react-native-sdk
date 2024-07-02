@@ -16,6 +16,7 @@ import {
   SafeAreaView,
   Text,
   View,
+  Alert,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
@@ -24,7 +25,7 @@ function App(): React.JSX.Element {
   const [token, settoken] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [configurationId, setConfigurationId] = useState('');
-  const [aeropassUserUuid, setAeropassUserUuid] = useState('');
+  const [aeroPassUserUuid, setAeroPassUserUuid] = useState('');
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('staging');
   const [items, setItems] = useState([
@@ -68,7 +69,7 @@ function App(): React.JSX.Element {
           onLoad={onLoad}
           deeplink="testaerosyncsample://"
           configurationId={configurationId}
-          aeropassUserUuid={aeropassUserUuid}
+          aeroPassUserUuid={aeroPassUserUuid}
           style={{
             width: '100%',
             height: '100%',
@@ -116,9 +117,9 @@ function App(): React.JSX.Element {
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
-              placeholder="Enter  aeropassUserUuid (optional)"
-              onChangeText={aeropassUserUuid =>
-                setAeropassUserUuid(aeropassUserUuid)
+              placeholder="Enter  aeroPassUserUuid (optional)"
+              onChangeText={aeroPassUserUuid =>
+                setAeroPassUserUuid(aeroPassUserUuid)
               }
               placeholderTextColor="#003f5c"
             />

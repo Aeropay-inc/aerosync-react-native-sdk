@@ -8,7 +8,7 @@ export interface Options {
   onError: (event: string) => void;
   token: string;
   configurationId?: string;
-  aeropassUserUuid?: string;
+  aeroPassUserUuid?: string;
   deeplink?: string;
   handleMFA?: boolean;
   jobId?: string;
@@ -26,7 +26,7 @@ export interface SuccessEventType {
   userId: string;
   connectionId: string;
   clientName: string;
-  aeropassUserUuid: string;
+  aeroPassUserUuid: string;
 }
 
 export interface WidgetEventType {
