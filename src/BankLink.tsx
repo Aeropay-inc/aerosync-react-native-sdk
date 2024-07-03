@@ -115,7 +115,7 @@ export default function BankLink(options: Options) {
 
 // environment constants
 const env: { [key: string]: string } = {
-  dev: 'https://qa.aerosync.com',
-  staging: 'https://staging.aerosync.com',
-  production: 'https://www.aerosync.com',
+  dev: 'https://qa-sync.aero.inc',
+  staging: 'https://staging-sync.aero.inc',
+  production: 'https://sync.aero.inc',
 };
