@@ -1,7 +1,7 @@
-import { View, StyleSheet, Linking, BackHandler } from 'react-native';
-import { useState, useEffect } from 'react';
-import { type Options } from './Types';
+import { useEffect, useState } from 'react';
+import { BackHandler, Linking, StyleSheet, View } from 'react-native';
 import { WebView, type WebViewNavigation } from 'react-native-webview';
+import { type Environment, type Options } from './Types';
 
 export default function BankLink(options: Options) {
   // stylesheet
@@ -111,7 +111,7 @@ export default function BankLink(options: Options) {
 }
 
 // environment constants
-const env: { [key: string]: string } = {
+const env: { [key in Environment]: string } = {
   dev: 'https://dev.aerosync.com',
   staging: 'https://staging.aerosync.com',
   production: 'https://www.aerosync.com',
