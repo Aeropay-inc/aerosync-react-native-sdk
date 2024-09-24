@@ -27,7 +27,7 @@ export default function AddBank({ navigation }) {
 
   // unique ID that represents the client to apply the customization
   // optional parameter - leave it blank if not needed
-  const consumerId = '';
+  const configurationId = '';
 
   // close webview
   onClose = () => {
@@ -58,7 +58,7 @@ export default function AddBank({ navigation }) {
       token={token}
       environment="production"
       deeplink={deeplink}
-      consumerId={consumerId}
+      configurationId={configurationId}
       onSuccess={onSuccess}
       onClose={onClose}
       onEvent={onEvent}
