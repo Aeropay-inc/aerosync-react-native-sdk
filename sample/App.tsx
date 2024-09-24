@@ -32,6 +32,7 @@ function App(): React.JSX.Element {
   const [items, setItems] = useState([
     {label: 'DEV', value: 'dev'},
     {label: 'STAGING', value: 'staging'},
+    {label: 'SANDBOX', value: 'sandbox'},
     {label: 'PRODUCTION', value: 'production'},
   ]);
 
