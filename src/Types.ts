@@ -1,4 +1,6 @@
-import type { DimensionValue, ColorValue } from 'react-native';
+import type { ColorValue, DimensionValue } from 'react-native';
+
+export type Environment = 'dev' | 'staging' | 'production';
 
 export interface Options {
   onLoad: () => void;
@@ -18,7 +20,7 @@ export interface Options {
     width: DimensionValue;
     height: DimensionValue;
   };
-  environment: string;
+  environment: Environment;
 }
 
 export interface SuccessEventType {
