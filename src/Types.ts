@@ -12,6 +12,7 @@ export interface Options {
   handleMFA?: boolean;
   jobId?: string;
   userId?: string;
+  limitsNavigationsToAppBoundDomains?: boolean;
   style?: {
     bgColor: ColorValue;
     opacity: number;

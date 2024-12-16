@@ -96,6 +96,7 @@ export default function BankLink(options: Options) {
         ref={(webView) => (webViewRef = webView)}
         onLoad={() => options.onLoad()}
         onNavigationStateChange={handleNavigationStateChange}
+        limitsNavigationsToAppBoundDomains= {options?.limitsNavigationsToAppBoundDomains || false}
         onOpenWindow={(syntheticEvent) => {
           const { nativeEvent } = syntheticEvent;
           const { targetUrl } = nativeEvent;
