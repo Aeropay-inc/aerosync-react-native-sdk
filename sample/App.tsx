@@ -67,6 +67,7 @@ function App(): React.JSX.Element {
           onLoad={onLoad}
           deeplink="testaerosyncsample://"
           consumerId={consumerId}
+          limitsNavigationsToAppBoundDomains = {true}
           style={{
             width: '100%',
             height: '100%',
