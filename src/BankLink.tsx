@@ -1,4 +1,4 @@
-import { View, StyleSheet, Linking, BackHandler } from 'react-native';
+import { View, StyleSheet, Linking, BackHandler, Platform } from 'react-native';
 import { useState, useEffect } from 'react';
 import { type Options } from './Types';
 import { WebView, type WebViewNavigation } from 'react-native-webview';
@@ -28,7 +28,6 @@ export default function BankLink(options: Options) {
 
   const [source, setSource] = useState(base_url);
   let canGoBack = false;
-  let widgetClosed = false;
   let webViewRef: any;
 
   useEffect(() => {
@@ -37,33 +36,23 @@ export default function BankLink(options: Options) {
        * When true is returned the event will not be bubbled up
        * & no other back action will execute
        */
-      if (canGoBack && webViewRef) {
-        webViewRef.goBack();
-        return true;
-      } else {
-        return false;
-      }
+      if (canGoBack && webViewRef) webViewRef.goBack();
+      else options.onClose();
+      return true;
     };
-    // the backhandler API detects hardware button presses for back navigatio
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    // the backhandler API detects hardware button presses for back navigation
+    if (Platform.OS === 'android')
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
     return () => {
-      if (!widgetClosed) {
-        options.onClose();
-      }
-      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      if (Platform.OS === 'android')
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     };
-  }, [options, widgetClosed, canGoBack, webViewRef]);
+  });
 
   const handleNavigationStateChange = (NavState: WebViewNavigation) => {
     const { url } = NavState;
     canGoBack = NavState.canGoBack;
-    if (
-      url.includes('aerosync.com/redirect') &&
-      !url.includes('&token=') &&
-      !options.deeplink
-    ) {
-      setSource(`${url}&token=${options.token}`);
-    }
+    if (url.includes('/bank/connect')) canGoBack = false;
   };
 
   return (
@@ -76,11 +65,9 @@ export default function BankLink(options: Options) {
           const r = JSON.parse(event.nativeEvent.data);
           switch (r.type) {
             case 'pageSuccess':
-              widgetClosed = true;
               options.onSuccess && options.onSuccess(r.payload);
               break;
             case 'widgetClose':
-              widgetClosed = true;
               options.onClose && options.onClose();
               break;
             case 'widgetPageLoaded':
@@ -96,7 +83,9 @@ export default function BankLink(options: Options) {
         ref={(webView) => (webViewRef = webView)}
         onLoad={() => options.onLoad()}
         onNavigationStateChange={handleNavigationStateChange}
-        limitsNavigationsToAppBoundDomains= {options?.limitsNavigationsToAppBoundDomains || false}
+        limitsNavigationsToAppBoundDomains={
+          options?.limitsNavigationsToAppBoundDomains || false
+        }
         onOpenWindow={(syntheticEvent) => {
           const { nativeEvent } = syntheticEvent;
           const { targetUrl } = nativeEvent;
@@ -113,8 +102,8 @@ export default function BankLink(options: Options) {
 
 // environment constants
 const env: { [key: string]: string } = {
-  dev: 'https://dev.aerosync.com',
-  staging: 'https://staging.aerosync.com',
+  dev: 'https://qa-sync.aero.inc',
+  staging: 'https://staging-sync.aero.inc',
   sandbox: 'https://sandbox.aerosync.com',
-  production: 'https://www.aerosync.com',
+  production: 'https://sync.aero.inc',
 };
