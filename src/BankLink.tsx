@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, StyleSheet, Linking, BackHandler, Platform } from 'react-native';
 import { useState, useEffect } from 'react';
 import { type Options } from './Types';
