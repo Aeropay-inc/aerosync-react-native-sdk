@@ -47,7 +47,7 @@ export default function BankLink(options: Options) {
       if (Platform.OS === 'android')
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     };
-  });
+  }, []);
 
   const handleNavigationStateChange = (NavState: WebViewNavigation) => {
     const { url } = NavState;
