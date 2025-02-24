@@ -19,7 +19,7 @@ export interface Options {
   configurationId?: string;
   aeroPassUserUuid?: string;
   manualLinkOnly?: boolean;
-  deeplink?: string;
+  deeplink: string;
   handleMFA?: boolean;
   jobId?: string;
   userId?: string;
