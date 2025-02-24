@@ -78,7 +78,7 @@ export default function BankLink(options: Options) {
         source={{
           uri: source,
           headers: {
-            deeplink: options.deeplink,
+            deeplink: options.deeplink || '',
           },
         }}
         onMessage={(event) => {
