@@ -9,6 +9,7 @@ import React, {useState} from 'react';
 import BankLink, {
   SuccessEventType,
   WidgetEventType,
+  Environment,
 } from 'aerosync-react-native-sdk';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
@@ -27,7 +28,7 @@ function App(): React.JSX.Element {
   const [configurationId, setConfigurationId] = useState('');
   const [aeroPassUserUuid, setAeroPassUserUuid] = useState('');
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('staging');
+  const [value, setValue] = useState('staging' as Environment);
   const [output, setoutput] = useState('');
   const [items, setItems] = useState([
     {label: 'DEV', value: 'dev'},
