@@ -9,6 +9,7 @@ import React, {useState} from 'react';
 import BankLink, {
   SuccessEventType,
   WidgetEventType,
+  Environment,
 } from 'aerosync-react-native-sdk';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
@@ -23,12 +24,15 @@ import {
 function App(): React.JSX.Element {
   const [token, settoken] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [consumerId, setconsumerId] = useState('');
+  const [configurationId, setConfigurationId] = useState('');
+  const [aeroPassUserUuid, setAeroPassUserUuid] = useState('');
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('staging');
+  const [value, setValue] = useState('staging' as Environment);
+  const [output, setoutput] = useState('');
   const [items, setItems] = useState([
     {label: 'DEV', value: 'dev'},
     {label: 'STAGING', value: 'staging'},
+    {label: 'SANDBOX', value: 'sandbox'},
     {label: 'PRODUCTION', value: 'production'},
   ]);
 
@@ -42,6 +46,7 @@ function App(): React.JSX.Element {
   };
 
   const onSuccess = (event: SuccessEventType) => {
+    setoutput(JSON.stringify(event));
     console.log('onSuccess', event);
     setIsSubmitted(false);
   };
@@ -66,8 +71,9 @@ function App(): React.JSX.Element {
           onSuccess={onSuccess}
           onLoad={onLoad}
           deeplink="testaerosyncsample://"
-          consumerId={consumerId}
-          limitsNavigationsToAppBoundDomains = {true}
+          configurationId={configurationId}
+          aeroPassUserUuid={aeroPassUserUuid}
+          limitsNavigationsToAppBoundDomains={true}
           style={{
             width: '100%',
             height: '100%',
@@ -81,7 +87,7 @@ function App(): React.JSX.Element {
       <SafeAreaView>
         <View style={styles.container}>
           <TouchableOpacity>
-            <Text style={styles.HomeTitle}>AeroSync UI Mock App</Text>
+            <Text style={styles.OutputTitle}>{output}</Text>
           </TouchableOpacity>
           <View style={styles.dropdownView}>
             <DropDownPicker
@@ -105,8 +111,20 @@ function App(): React.JSX.Element {
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
-              placeholder="Enter  consumerId (optional)"
-              onChangeText={consumerId => setconsumerId(consumerId)}
+              placeholder="Enter  configurationId (optional)"
+              onChangeText={configurationId =>
+                setConfigurationId(configurationId)
+              }
+              placeholderTextColor="#003f5c"
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Enter aeroPassUserUuid (optional)"
+              onChangeText={aeroPassUserUuid =>
+                setAeroPassUserUuid(aeroPassUserUuid)
+              }
               placeholderTextColor="#003f5c"
             />
           </View>
@@ -156,11 +174,9 @@ const styles = StyleSheet.create({
     height: 30,
     marginBottom: 30,
   },
-  HomeTitle: {
-    height: 30,
-    marginTop: 60,
-    fontSize: 20,
-    fontWeight: 'bold',
+  OutputTitle: {
+    color: 'black',
+    height: 100,
   },
   loginBtn: {
     width: '80%',

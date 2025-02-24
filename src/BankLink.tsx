@@ -1,6 +1,6 @@
 import { View, StyleSheet, Linking, BackHandler, Platform } from 'react-native';
 import { useState, useEffect } from 'react';
-import { type Options } from './Types';
+import { env, type Options } from './Types';
 import { WebView, type WebViewNavigation } from 'react-native-webview';
 
 export default function BankLink(options: Options) {
@@ -19,8 +19,14 @@ export default function BankLink(options: Options) {
   if (options.deeplink) {
     base_url = `${base_url}&deeplink=${options.deeplink}`;
   }
-  if (options.consumerId) {
-    base_url = `${base_url}&consumerId=${options.consumerId}`;
+  if (options.configurationId) {
+    base_url = `${base_url}&consumerId=${options.configurationId}`;
+  }
+  if (options.manualLinkOnly) {
+    base_url = `${base_url}&manualLinkOnly=${options.manualLinkOnly}`;
+  }
+  if (options.aeroPassUserUuid) {
+    base_url = `${base_url}&aeroPassUserUuid=${options.aeroPassUserUuid}`;
   }
   if (options.handleMFA) {
     base_url = `${base_url}&handleMFA=${options.handleMFA}&jobId=${options.jobId}&userId=${options.userId}`;
@@ -60,6 +66,9 @@ export default function BankLink(options: Options) {
       <WebView
         source={{
           uri: source,
+          headers: {
+            deeplink: options.deeplink || '',
+          },
         }}
         onMessage={(event) => {
           const r = JSON.parse(event.nativeEvent.data);
@@ -99,11 +108,3 @@ export default function BankLink(options: Options) {
     </View>
   );
 }
-
-// environment constants
-const env: { [key: string]: string } = {
-  dev: 'https://qa-sync.aero.inc',
-  staging: 'https://staging-sync.aero.inc',
-  sandbox: 'https://sandbox.aerosync.com',
-  production: 'https://sync.aero.inc',
-};
