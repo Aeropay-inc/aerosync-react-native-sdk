@@ -74,6 +74,9 @@ export default function BankLink(options: Options) {
       <WebView
         source={{
           uri: source,
+          headers: {
+            deeplink: options.deeplink,
+          },
         }}
         onMessage={(event) => {
           const r = JSON.parse(event.nativeEvent.data);
