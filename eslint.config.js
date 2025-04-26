@@ -1,13 +1,12 @@
-const js = require('@eslint/js')
-const reactHooksPlugin = require('eslint-plugin-react-hooks')
-const prettier = require('eslint-config-prettier')
-const tsPlugin = require('@typescript-eslint/eslint-plugin');
-const tsParser = require('@typescript-eslint/parser');
-const reactPlugin = require('eslint-plugin-react');
-const reactNativePlugin = require('eslint-plugin-react-native');
+import js from '@eslint/js';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import prettier from 'eslint-config-prettier';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import reactPlugin from 'eslint-plugin-react';
+import reactNativePlugin from 'eslint-plugin-react-native';
 
-
-module.exports = [
+export default [
   js.configs.recommended,
   {
     files: ['src/**/*.ts', 'src/**/*.tsx'],
@@ -35,7 +34,7 @@ module.exports = [
       'react-hooks/exhaustive-deps': 'off',
       'react-native/sort-styles': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
     },
     settings: {
       react: {
@@ -48,4 +47,4 @@ module.exports = [
     ignores: ["sample/**", "demo/*", "**/lib/**", "**/__tests__/**", "**/dist/**", "**/*.config.js"],
   },
   prettier,
-]
+];
