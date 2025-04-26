@@ -5,127 +5,192 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useState } from 'react';
+import BankLink, {
+  SuccessEventType,
+  WidgetEventType,
+  Environment,
+} from 'aerosync-react-native-sdk';
+import DropDownPicker from 'react-native-dropdown-picker';
 import {
-  ScrollView,
-  StatusBar,
   StyleSheet,
+  SafeAreaView,
   Text,
-  useColorScheme,
   View,
+  TextInput,
+  TouchableOpacity,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [token, settoken] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [configurationId, setConfigurationId] = useState('');
+  const [aeroPassUserUuid, setAeroPassUserUuid] = useState('');
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('staging' as Environment);
+  const [output, setoutput] = useState('');
+  const [items, setItems] = useState([
+    { label: 'DEV', value: 'dev' },
+    { label: 'STAGING', value: 'staging' },
+    { label: 'SANDBOX', value: 'sandbox' },
+    { label: 'PRODUCTION', value: 'production' },
+  ]);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const onLoad = () => {
+    console.log('onLoad');
   };
 
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the recommendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
+  const onClose = () => {
+    console.log('onClose');
+    setIsSubmitted(false);
+  };
 
-  return (
-    <View style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
-        </View>
-        <View
+  const onSuccess = (event: SuccessEventType) => {
+    setoutput(JSON.stringify(event));
+    console.log('onSuccess', event);
+    setIsSubmitted(false);
+  };
+
+  const onEvent = (event: WidgetEventType) => {
+    console.log('onEvent', event);
+  };
+
+  const onError = (event: string) => {
+    console.log('onError', event);
+  };
+
+  if (isSubmitted) {
+    return (
+      <SafeAreaView>
+        <BankLink
+          token={token}
+          environment={value}
+          onError={onError}
+          onClose={onClose}
+          onEvent={onEvent}
+          onSuccess={onSuccess}
+          onLoad={onLoad}
+          deeplink="testaerosyncsample://"
+          configurationId={configurationId}
+          aeroPassUserUuid={aeroPassUserUuid}
+          limitsNavigationsToAppBoundDomains={true}
           style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+            width: '100%',
+            height: '100%',
+            opacity: 1,
+            bgColor: '#FFFFFF',
+          }}></BankLink>
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView>
+        <View style={styles.container}>
+          <TouchableOpacity>
+            <Text style={styles.OutputTitle}>{output}</Text>
+          </TouchableOpacity>
+          <View style={styles.dropdownView}>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              placeholder="select environment*"
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Enter Aerosync token*"
+              onChangeText={token => settoken(token)}
+              placeholderTextColor="#003f5c"
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Enter  configurationId (optional)"
+              onChangeText={configurationId =>
+                setConfigurationId(configurationId)
+              }
+              placeholderTextColor="#003f5c"
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Enter aeroPassUserUuid (optional)"
+              onChangeText={aeroPassUserUuid =>
+                setAeroPassUserUuid(aeroPassUserUuid)
+              }
+              placeholderTextColor="#003f5c"
+            />
+          </View>
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={() => setIsSubmitted(true)}>
+            <Text style={styles.loginText}>Launch Aerosync widget</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-    </View>
-  );
+      </SafeAreaView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    height: '100%',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  image: {
+    marginBottom: 40,
+    width: '25%',
+    height: '15%',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  inputView: {
+    borderWidth: 1,
+    borderRadius: 5,
+    width: '70%',
+    height: 45,
+    marginBottom: 20,
   },
-  highlight: {
-    fontWeight: '700',
+  dropdownView: {
+    width: '70%',
+    height: 45,
+    marginBottom: 20,
+    zIndex: 100,
+  },
+  TextInput: {
+    color: 'black',
+    height: 50,
+    flex: 1,
+    marginLeft: 20,
+  },
+  forgot_button: {
+    height: 30,
+    marginBottom: 30,
+  },
+  OutputTitle: {
+    color: 'black',
+    height: 100,
+  },
+  loginBtn: {
+    width: '80%',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 40,
+    backgroundColor: '#24c3d2',
+  },
+  loginText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
-
 export default App;

@@ -9,6 +9,10 @@
 .vscode/
 jsconfig.json
 
+#yalc
+.yalc/
+yalc.lock
+
 # Xcode
 #
 build/
