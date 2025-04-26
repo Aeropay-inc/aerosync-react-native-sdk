@@ -3,14 +3,15 @@ import { useState } from 'react';
 import { env, type Options } from './Types';
 import { WebView } from 'react-native-webview';
 
+
 export default function BankLink(options: Options) {
   // stylesheet
   const styles = StyleSheet.create({
     container: {
-      height: options?.style?.height || '100%',
-      width: options?.style?.width || '100%',
       backgroundColor: options?.style?.bgColor || '#FFFFFF',
       opacity: options?.style?.opacity || 1,
+      height: options?.style?.height || '100%',
+      width: options?.style?.width || '100%',
     },
   });
 
@@ -62,7 +63,7 @@ export default function BankLink(options: Options) {
   // };
 
   return (
-    <View style={[styles.container]}>
+    <View style={styles.container}>
       <WebView
         source={{
           uri: source,
