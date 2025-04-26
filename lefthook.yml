@@ -5,7 +5,7 @@ pre-commit:
       files: git diff --name-only @{push}
       glob: '*.{js,ts,jsx,tsx}'
       exclude: ^(sample|demo)/
-      run: npx eslint {files}
+      run: npx eslint {files} --config eslint.config.js
     types:
       files: git diff --name-only @{push}
       glob: '*.{js,ts, jsx, tsx}'

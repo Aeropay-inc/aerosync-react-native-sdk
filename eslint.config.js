@@ -1,22 +1,37 @@
-module.exports = {
-  env: {
-    browser: true,
-    es2021: true,
-  },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-  ],
-  parserOptions: {
-    ecmaVersion: 12,
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true,
+const js = require('@eslint/js')
+const reactPlugin = require('eslint-plugin-react')
+const reactHooksPlugin = require('eslint-plugin-react-hooks')
+const prettier = require('eslint-config-prettier')
+
+
+module.exports = [
+  js.configs.recommended,
+  {
+    files: ['**/*.js', '**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      ecmaVersion: 2021,
+      sourceType: 'module',
+      globals: {
+        window: 'readonly',
+        document: 'readonly',
+        console: 'readonly',
+        module: 'writable',
+        require: 'readonly',
+        process: 'readonly',
+      },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+    },
+    rules: {
+      'react-hooks/exhaustive-deps': 'off',
     },
   },
-  plugins: ['react', 'react-hooks'],
-  rules: {
-    'react-hooks/exhaustive-deps': 0,
-  },
-};
+  prettier,
+]
