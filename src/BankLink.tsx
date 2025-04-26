@@ -1,7 +1,10 @@
-import { View, StyleSheet, Linking, BackHandler, Platform } from 'react-native';
-import { useState, useEffect } from 'react';
+// import { View, StyleSheet, Linking, BackHandler, Platform } from 'react-native';
+import { View, StyleSheet, Linking } from 'react-native';
+// import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { env, type Options } from './Types';
-import { WebView, type WebViewNavigation } from 'react-native-webview';
+// import { WebView, type WebViewNavigation } from 'react-native-webview';
+import { WebView } from 'react-native-webview';
 
 export default function BankLink(options: Options) {
   // stylesheet
@@ -33,33 +36,33 @@ export default function BankLink(options: Options) {
   }
 
   const [source, setSource] = useState(base_url);
-  let canGoBack = false;
+  // let canGoBack = false;
   let webViewRef: any;
 
-  useEffect(() => {
-    const onBackPress = () => {
-      /**
-       * When true is returned the event will not be bubbled up
-       * & no other back action will execute
-       */
-      if (canGoBack && webViewRef) webViewRef.goBack();
-      else options.onClose();
-      return true;
-    };
-    // the backhandler API detects hardware button presses for back navigation
-    if (Platform.OS === 'android')
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-    return () => {
-      if (Platform.OS === 'android')
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const onBackPress = () => {
+  //     /**
+  //      * When true is returned the event will not be bubbled up
+  //      * & no other back action will execute
+  //      */
+  //     if (canGoBack && webViewRef) webViewRef.goBack();
+  //     else options.onClose();
+  //     return true;
+  //   };
+  //   // the backhandler API detects hardware button presses for back navigation
+  //   if (Platform.OS === 'android')
+  //     BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  //   return () => {
+  //     if (Platform.OS === 'android')
+  //       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  //   };
+  // }, []);
 
-  const handleNavigationStateChange = (NavState: WebViewNavigation) => {
-    const { url } = NavState;
-    canGoBack = NavState.canGoBack;
-    if (url.includes('/bank/connect')) canGoBack = false;
-  };
+  // const handleNavigationStateChange = (NavState: WebViewNavigation) => {
+  //   const { url } = NavState;
+  //   canGoBack = NavState.canGoBack;
+  //   if (url.includes('/bank/connect')) canGoBack = false;
+  // };
 
   return (
     <View style={[styles.container]}>
@@ -91,7 +94,7 @@ export default function BankLink(options: Options) {
         }}
         ref={(webView) => (webViewRef = webView)}
         onLoad={() => options.onLoad()}
-        onNavigationStateChange={handleNavigationStateChange}
+        // onNavigationStateChange={handleNavigationStateChange}
         limitsNavigationsToAppBoundDomains={
           options?.limitsNavigationsToAppBoundDomains || false
         }
