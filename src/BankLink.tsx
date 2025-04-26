@@ -1,9 +1,6 @@
-// import { View, StyleSheet, Linking, BackHandler, Platform } from 'react-native';
 import { View, StyleSheet, Linking } from 'react-native';
-// import { useState, useEffect } from 'react';
 import { useState } from 'react';
 import { env, type Options } from './Types';
-// import { WebView, type WebViewNavigation } from 'react-native-webview';
 import { WebView } from 'react-native-webview';
 
 export default function BankLink(options: Options) {
@@ -37,7 +34,7 @@ export default function BankLink(options: Options) {
 
   const [source, setSource] = useState(base_url);
   // let canGoBack = false;
-  let webViewRef: any;
+  // let webViewRef: any;
 
   // useEffect(() => {
   //   const onBackPress = () => {
@@ -92,7 +89,7 @@ export default function BankLink(options: Options) {
               options.onEvent && options.onEvent(r.payload);
           }
         }}
-        ref={(webView) => (webViewRef = webView)}
+        // ref={(webView) => (webViewRef = webView)}
         onLoad={() => options.onLoad()}
         // onNavigationStateChange={handleNavigationStateChange}
         limitsNavigationsToAppBoundDomains={
