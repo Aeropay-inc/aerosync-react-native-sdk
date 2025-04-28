@@ -29,21 +29,46 @@ export default function App(): React.JSX.Element {
    return (
         <PaperProvider theme={theme}>
           <NavigationContainer>
-            <Drawer.Navigator initialRouteName='Home'>
+            <Drawer.Navigator 
+                initialRouteName='Home'
+                screenOptions={{
+                  drawerStyle: {
+                    backgroundColor: '#0077cc', 
+                  },
+                  headerStyle: {
+                    backgroundColor: '#0077cc',
+                  },
+                   headerTintColor: 'white',
+                   headerTitleStyle: {
+                    fontWeight: 'bold', 
+                  },
+                }}>
               <Drawer.Screen name="Home" component={HomeScreen} options={{
                 drawerIcon: ({ focused, size}) => (
-                  <Icon name="house" iconStyle="solid" size={size} color={focused ? 'tomato' : 'gray'} />
-                )
+                  <Icon name="house" iconStyle="solid" size={size} color={focused ? '#00BFFF' : 'gray'} />
+                ),
+                drawerLabelStyle: {
+                  color: 'white', 
+                  fontWeight: 'bold'
+                },
               }} />
               <Drawer.Screen name="Settings" component={SettingScreen} options={{
                 drawerIcon: ({ focused, size}) => (
-                  <Icon name="gear" iconStyle="solid" size={size} color={focused ? 'tomato': 'gray'} />
-                )
+                  <Icon name="gear" iconStyle="solid" size={size} color={focused ? '#00BFFF': 'gray'} />
+                ),
+                drawerLabelStyle: {
+                  color: 'white', 
+                  fontWeight: 'bold'
+                },
               }}/>
               <Drawer.Screen name="Payment" component={PaymentScreen} options={{
                 drawerIcon: ({ focused, size}) => (
-                  <Icon name="credit-card" iconStyle="solid" size={size} color={focused ? 'tomato': 'gray'} />
-                )
+                  <Icon name="credit-card" iconStyle="solid" size={size} color={focused ? '#00BFFF': 'gray'} />
+                ),
+                drawerLabelStyle: {
+                  color: 'white', 
+                  fontWeight: 'bold'
+                },
               }} />
             </Drawer.Navigator>
           </NavigationContainer>
