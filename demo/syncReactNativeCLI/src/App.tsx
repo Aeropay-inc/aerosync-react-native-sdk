@@ -17,6 +17,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from './screens/HomeScreen';
 import SettingScreen from './screens/SettingScreen';
 import PaymentScreen from './screens/PaymentScreen';
+import Icon from '@react-native-vector-icons/fontawesome6';
 
 
 
@@ -29,9 +30,21 @@ export default function App(): React.JSX.Element {
         <PaperProvider theme={theme}>
           <NavigationContainer>
             <Drawer.Navigator initialRouteName='Home'>
-              <Drawer.Screen name="Home" component={HomeScreen} />
-              <Drawer.Screen name="Settings" component={SettingScreen} />
-              <Drawer.Screen name="Payment" component={PaymentScreen} />
+              <Drawer.Screen name="Home" component={HomeScreen} options={{
+                drawerIcon: ({ focused, size}) => (
+                  <Icon name="house" iconStyle="solid" size={size} color={focused ? 'tomato' : 'gray'} />
+                )
+              }} />
+              <Drawer.Screen name="Settings" component={SettingScreen} options={{
+                drawerIcon: ({ focused, size}) => (
+                  <Icon name="gear" iconStyle="solid" size={size} color={focused ? 'tomato': 'gray'} />
+                )
+              }}/>
+              <Drawer.Screen name="Payment" component={PaymentScreen} options={{
+                drawerIcon: ({ focused, size}) => (
+                  <Icon name="credit-card" iconStyle="solid" size={size} color={focused ? 'tomato': 'gray'} />
+                )
+              }} />
             </Drawer.Navigator>
           </NavigationContainer>
         </PaperProvider>
