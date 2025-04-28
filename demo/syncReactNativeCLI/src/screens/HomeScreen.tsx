@@ -3,7 +3,7 @@ import { Text, useTheme } from 'react-native-paper';
 
 const HomeScreen = () => {
     const { colors } = useTheme();
-    
+
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
             <Text style={[styles.title, { color: colors.text }]}>
