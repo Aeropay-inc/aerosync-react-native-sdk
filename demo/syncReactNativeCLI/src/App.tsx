@@ -19,6 +19,7 @@ import SettingScreen from './screens/SettingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import Icon from '@react-native-vector-icons/fontawesome6';
 import { StoreProvider } from './context/StoreContext'; 
+import Toast from 'react-native-toast-message';
 
 export default function App(): React.JSX.Element {
   const Drawer = createDrawerNavigator();
@@ -72,6 +73,7 @@ export default function App(): React.JSX.Element {
                 }} />
               </Drawer.Navigator>
             </NavigationContainer>
+            <Toast />
           </PaperProvider>
         </StoreProvider>
       );

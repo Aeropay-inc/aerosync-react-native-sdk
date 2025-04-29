@@ -3,40 +3,46 @@ import { useState } from "react";
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { TextInput, Button, Switch, Text, useTheme } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { env } from 'aerosync-react-native-sdk';
+import Toast from 'react-native-toast-message';
 
 export default function SettingScreen() {
     const theme = useTheme();
-    const { widgetConfig, setWidgetConfigAction } = useStore();
-    const setUser = () => {
-    const newConfig = {
-        token: 'some-token',
-        environment: 'qa',
-        configurationId: 'config123',
-        aeroPassUserUuid: 'user-uuid-123',
-        isEmbeddedFlow: true,
-        };
-        setWidgetConfigAction(newConfig); // Set widget config in context
-    };
-
+    const { setWidgetConfigAction } = useStore();
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-        {label: 'Apple', value: 'apple'},
-        {label: 'Banana', value: 'banana'}
-    ]);
+    const [selectedEnv, setSelectedEnv] = useState<string | null>(null);
     const [token, setToken] = useState<string>('');
     const [configId, setConfigId] = useState<string>('');
     const [aeroPassId, setAeroPassId] = useState<string>('');
-    const [dropdownValue, setDropdownValue] = useState<string | undefined>('');
     const [isSwitchOn, setIsSwitchOn] = useState<boolean>(false);
     const toggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+    const envItems = Object.entries(env).map(([key, value]) => ({
+        label: `${key.toUpperCase()}`,
+        value: key,
+      }));
     
     const handleSubmit = () => {
-        // console.log({
-        //   textInputValue,
-        //   dropdownValue,
-        //   isSwitchOn,
-        // });
+        if(token.trim() === '') {
+            Toast.show({
+                type: 'error',
+                text1: 'Token is required!'
+                });
+            return
+        }
+        const newConfig = {
+            token: token,
+            environment: selectedEnv || 'dev',
+            configurationId: configId,
+            aeroPassUserUuid: aeroPassId,
+            isEmbeddedFlow: isSwitchOn,
+            };
+            // Set widget config in context
+            setWidgetConfigAction(newConfig); 
+            // show toast 
+            Toast.show({
+                type: 'success',
+                text1: 'Configuration updated successfully!'
+              });
       };
     
     return (
@@ -47,7 +53,7 @@ export default function SettingScreen() {
 
             {/* Token */}
             <View style={styles.formElement}>
-                <Text variant="bodyLarge">Token</Text>
+                <Text variant="bodyLarge">Token *</Text>
                 <TextInput
                 label="sync token"
                 value={token}
@@ -83,14 +89,14 @@ export default function SettingScreen() {
 
             {/* Label + Dropdown Selector */}
             <View style={styles.formElement}>
-                <Text variant="bodyLarge">Environment</Text>
+                <Text variant="bodyLarge">Environment *</Text>
                 <DropDownPicker
                     open={open}
-                    value={value}
-                    items={items}
+                    value={selectedEnv}
+                    items={envItems}
                     setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
+                    setValue={setSelectedEnv}
+                    setItems={() => {}}
                     listMode="SCROLLVIEW"
                     placeholder="Select an option"
                     placeholderStyle={{
@@ -169,6 +175,7 @@ const styles = StyleSheet.create({
     dropdown: {
         marginBottom: 20,
         height: 60,
+        marginTop: 8
       },
   });
   
