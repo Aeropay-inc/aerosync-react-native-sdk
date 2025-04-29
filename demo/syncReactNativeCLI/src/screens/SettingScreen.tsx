@@ -55,7 +55,6 @@ export default function SettingScreen() {
             <View style={styles.formElement}>
                 <Text variant="bodyLarge">Token *</Text>
                 <TextInput
-                label="sync token"
                 value={token}
                 onChangeText={setToken}
                 mode="outlined"
@@ -67,7 +66,6 @@ export default function SettingScreen() {
             <View style={styles.formElement}>
                 <Text variant="bodyLarge">configuration Id</Text>
                 <TextInput
-                label="customization Id"
                 value={configId}
                 onChangeText={setConfigId}
                 mode="outlined"
@@ -79,7 +77,6 @@ export default function SettingScreen() {
             <View style={styles.formElement}>
                 <Text variant="bodyLarge">AeroPass ID</Text>
                 <TextInput
-                label="aeroPassUserUuid"
                 value={aeroPassId}
                 onChangeText={setAeroPassId}
                 mode="outlined"
