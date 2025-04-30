@@ -1,10 +1,9 @@
-import BankLink, { Environment, SuccessEventType, WidgetEventType } from "aerosync-react-native-sdk";
+import  { AeroSyncWidget, Environment, SuccessEventType, WidgetEventType } from "aerosync-react-native-sdk";
 import { useStore } from "../context/StoreContext";
-import Toast from 'react-native-toast-message';
 import { AeroSyncWidgetProps } from "../types/widget.interface";
 
 
-export default function AeroSyncWidget({onWidgetClose}: AeroSyncWidgetProps) {
+export default function Widget({onWidgetClose}: AeroSyncWidgetProps) {
 
     const { widgetConfig } = useStore();
 
@@ -31,26 +30,14 @@ export default function AeroSyncWidget({onWidgetClose}: AeroSyncWidgetProps) {
         console.log('onError', event);
       };
 
-
-      /* Widget props guard */
-      if (!widgetConfig?.token) {
-        onWidgetClose?.();
-        Toast.show({
-            type: 'error',
-            text1: 'Oops! It looks like you haven’t set your token yet.',
-            text2: 'Head over to the Settings page to add it.'
-            });
-        return null;
-      };
-
     return (
-        <BankLink 
+        <AeroSyncWidget 
             onLoad={onLoad}
             onError={onError}
             onClose={onClose}
             onEvent={onEvent}
             onSuccess={onSuccess}
-            token={widgetConfig.token}
+            token={widgetConfig!.token}
             deeplink="testaerosyncsample://"
             environment={(widgetConfig?.environment ?? 'dev') as Environment}
             {...(widgetConfig?.configurationId ? {configurationId: widgetConfig.configurationId}: {})}

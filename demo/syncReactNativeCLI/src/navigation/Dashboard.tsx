@@ -4,7 +4,7 @@ import SettingScreen from '../screens/SettingScreen';
 import PaymentScreen from '../screens/PaymentScreen';
 import Icon from "@react-native-vector-icons/fontawesome6";
 import { View } from "react-native";
-import { Support } from "../components/support";
+import { Support } from "../components/Support";
 
 
 export const Dashboard = () => {

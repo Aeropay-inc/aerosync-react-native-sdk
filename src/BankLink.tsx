@@ -1,39 +1,19 @@
-import { View, StyleSheet, Linking } from 'react-native';
-import { useState } from 'react';
-import { env, type Options } from './Types';
-import { WebView } from 'react-native-webview';
+import { type AeroSyncEmbeddedInputProps, type AeroSyncWidgetInputProps } from './Types';
+import { BankWebView } from './BankWebView';
 
 
-export default function BankLink(options: Options) {
+export function AeroSyncWidget(options: AeroSyncWidgetInputProps) {
   // stylesheet
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: options?.style?.bgColor || '#FFFFFF',
-      opacity: options?.style?.opacity || 1,
-      height: options?.style?.height || '100%',
-      width: options?.style?.width || '100%',
-    },
-  });
+  // const styles = StyleSheet.create({
+  //   container: {
+  //     backgroundColor: options?.style?.bgColor || '#FFFFFF',
+  //     opacity: options?.style?.opacity || 1,
+  //     height: options?.style?.height || '100%',
+  //     width: options?.style?.width || '100%',
+  //   },
+  // });
 
-  // set the base url
-  let base_url: string = `${env[options.environment]}/?token=${options.token}`;
-  if (options.deeplink) {
-    base_url = `${base_url}&deeplink=${options.deeplink}`;
-  }
-  if (options.configurationId) {
-    base_url = `${base_url}&consumerId=${options.configurationId}`;
-  }
-  if (options.manualLinkOnly) {
-    base_url = `${base_url}&manualLinkOnly=${options.manualLinkOnly}`;
-  }
-  if (options.aeroPassUserUuid) {
-    base_url = `${base_url}&aeroPassUserUuid=${options.aeroPassUserUuid}`;
-  }
-  if (options.handleMFA) {
-    base_url = `${base_url}&handleMFA=${options.handleMFA}&jobId=${options.jobId}&userId=${options.userId}`;
-  }
 
-  const [source, setSource] = useState(base_url);
   // let canGoBack = false;
   // let webViewRef: any;
 
@@ -63,49 +43,13 @@ export default function BankLink(options: Options) {
   // };
 
   return (
-    <View style={styles.container}>
-      <WebView
-        source={{
-          uri: source,
-          headers: {
-            deeplink: options.deeplink || '',
-          },
-        }}
-        onMessage={(event) => {
-          const r = JSON.parse(event.nativeEvent.data);
-          switch (r.type) {
-            case 'pageSuccess':
-              options.onSuccess && options.onSuccess(r.payload);
-              break;
-            case 'widgetClose':
-              options.onClose && options.onClose();
-              break;
-            case 'widgetPageLoaded':
-              options.onEvent && options.onEvent(r.payload);
-              break;
-            case 'widgetError':
-              options.onError && options.onError(r.payload);
-              break;
-            default:
-              options.onEvent && options.onEvent(r.payload);
-          }
-        }}
-        // ref={(webView) => (webViewRef = webView)}
-        onLoad={() => options.onLoad()}
-        // onNavigationStateChange={handleNavigationStateChange}
-        limitsNavigationsToAppBoundDomains={
-          options?.limitsNavigationsToAppBoundDomains || false
-        }
-        onOpenWindow={(syntheticEvent) => {
-          const { nativeEvent } = syntheticEvent;
-          const { targetUrl } = nativeEvent;
-          if (options.deeplink) {
-            Linking.openURL(targetUrl);
-          } else {
-            setSource(targetUrl);
-          }
-        }}
-      />
-    </View>
+    <BankWebView type='widget'  {...options} />
+  );
+}
+
+
+export function AeroSyncEmbeddedView(options: AeroSyncEmbeddedInputProps) {
+  return (
+    <BankWebView type='embedded' {...options} />
   );
 }

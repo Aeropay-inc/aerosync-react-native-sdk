@@ -3,7 +3,9 @@ import { useStore } from "../context/StoreContext";
 import { Button, RadioButton, useTheme } from "react-native-paper";
 import { useState } from "react";
 import Icon from "@react-native-vector-icons/fontawesome6";
-import AeroSyncWidget from "../components/AeroSyncWidget";
+import Widget from "../components/Widget";
+import Toast from "react-native-toast-message";
+import Embedded from "../components/embedded";
 
 
 export default function PaymentScreen() {
@@ -14,13 +16,22 @@ export default function PaymentScreen() {
     const [isWidgetEnabled, setIsWidgetEnabled] = useState(false);
 
     const openWidget = () => {
+      /* Widget props guard */
+      if (!widgetConfig?.token) {
+        Toast.show({
+            type: 'error',
+            text1: 'Oops! It looks like you haven’t set your token yet.',
+            text2: 'Head over to the Settings page to add it.'
+            });
+        return null;
+      };      
       setIsWidgetEnabled(true)
     }
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
-          {isWidgetEnabled ? (
-              <AeroSyncWidget onWidgetClose={() => setIsWidgetEnabled(false)} />
+          { isWidgetEnabled ? (
+              <Widget onWidgetClose={() => setIsWidgetEnabled(false)} />
               ) : (
                 <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
                   <Text style={[styles.title, { color: theme.colors.text }]}>Select a payment method</Text>
@@ -50,13 +61,17 @@ export default function PaymentScreen() {
                       <Text style={{ color: theme.colors.text }}>Pay by bank instantly and save 3%</Text>
                   </View>
 
-                  <Button mode="contained"  style={styles.linkButton} onPress={openWidget}>
+                  { widgetConfig?.isEmbeddedFlow ? (
+                    <View style={styles.emeddedView}>
+                      <Embedded />
+                    </View>
+                  ) : <Button mode="contained"  style={styles.linkButton} onPress={openWidget}>
                       <View style={{ flexDirection: 'row', marginRight: 20, gap: 15 }}>
                           <Icon name="credit-card" iconStyle="solid" size={18} />    
                           <Text style={[styles.buttonText, { color: theme.colors.text }]}>Link new bank</Text>
                           <Icon name="user" iconStyle="solid" size={18} />    
                       </View>
-                  </Button>            
+                    </Button> }           
 
                   <View style={styles.radioButtonContainer}>
                       <RadioButton
@@ -148,4 +163,8 @@ const styles = StyleSheet.create({
         fontWeight: '300', 
         color: '#777',
       },
+      emeddedView: {
+        marginBottom: 20,
+        height: 350
+      }
   });

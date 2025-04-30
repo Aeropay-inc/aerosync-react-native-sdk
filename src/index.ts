@@ -1,6 +1,2 @@
-// export * from './Types';
-import BankLink from './BankLink';
-
-export default BankLink;
-
+export { AeroSyncEmbeddedView, AeroSyncWidget } from './BankLink';
 export * from './Types';

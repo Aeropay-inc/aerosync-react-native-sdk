@@ -9,15 +9,16 @@ export const env: { [key in Environment]: string } = {
   production: 'https://sync.aero.inc',
 };
 
-export interface Options {
+export interface AeroSyncWidgetProps {
+  type: 'widget'
+  token: string;
   onLoad: () => void;
+  onError: (event: string) => void;
+  onEvent: (event: WidgetEventType) => void;
   onClose: () => void;
   onSuccess: (event: SuccessEventType) => void;
-  onEvent: (event: WidgetEventType) => void;
-  onError: (event: string) => void;
-  token: string;
-  configurationId?: string;
-  aeroPassUserUuid?: string;
+  consumerId?: string;
+  environment: Environment;
   manualLinkOnly?: boolean;
   deeplink: string;
   handleMFA?: boolean;
@@ -30,8 +31,20 @@ export interface Options {
     width: DimensionValue;
     height: DimensionValue;
   };
-  environment: Environment;
 }
+
+export type AeroSyncEmbeddedProps = Pick<AeroSyncWidgetProps,
+  'token' | 'onLoad' | 'onError' | 'consumerId' | 'environment' | 'deeplink'> & {
+    type: 'embedded'
+    onBankClick: () => void;
+  }
+
+export type AeroSyncWebViewProps = AeroSyncWidgetProps | AeroSyncEmbeddedProps;
+
+export type AeroSyncWidgetInputProps = Omit<AeroSyncWidgetProps, 'type'>;
+
+export type AeroSyncEmbeddedInputProps = Omit<AeroSyncEmbeddedProps, 'type'>;
+
 
 export interface SuccessEventType {
   userId: string;
