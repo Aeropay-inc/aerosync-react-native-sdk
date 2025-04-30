@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { WidgetConfigType, StoreContextType } from '../types/widget.interface'
+import { WidgetConfigType, StoreContextType, StoreProviderProps } from '../types/widget.interface'
 
 // Create a context for your store
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -12,10 +12,13 @@ export const useStore = (): StoreContextType => {
   return context;
 };
 
-export const StoreProvider = ({ children }) => {
+export const StoreProvider = ({ children }: StoreProviderProps) => {
     const [widgetConfig, setWidgetConfig] = useState<WidgetConfigType | null>(null);
-
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    
     const setWidgetConfigAction = (config: WidgetConfigType) => {
+        // control the widget config update
         setWidgetConfig(config);
       };
 
@@ -23,7 +26,11 @@ export const StoreProvider = ({ children }) => {
     <StoreContext.Provider
       value={{
         widgetConfig,
-        setWidgetConfigAction 
+        setWidgetConfigAction,
+        isDarkMode,
+        setIsDarkMode,
+        isAuthenticated,
+        setIsAuthenticated
       }}
     >
       {children}

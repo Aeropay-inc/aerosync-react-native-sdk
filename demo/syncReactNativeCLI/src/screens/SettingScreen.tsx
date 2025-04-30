@@ -84,7 +84,7 @@ export default function SettingScreen() {
                 />
             </View>                        
 
-            {/* Label + Dropdown Selector */}
+            {/* Environment */}
             <View style={styles.formElement}>
                 <Text variant="bodyLarge">Environment *</Text>
                 <DropDownPicker
@@ -124,13 +124,12 @@ export default function SettingScreen() {
                 />
             </View>
 
-            {/* Label + Switch */}
+            {/* Embedded */}
             <View style={styles.formSwitchElement}>
                 <Text variant="bodyLarge" style={styles.formSwitchElementLabel}>Embedded View ?</Text>
                 <Switch value={isSwitchOn} onValueChange={toggleSwitch} />
             </View>
 
-            {/* Submit Button */}
             <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>
                 Submit
             </Button>

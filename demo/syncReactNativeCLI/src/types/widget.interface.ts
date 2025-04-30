@@ -1,3 +1,5 @@
+import { ReactNode } from "react"
+
 export interface WidgetConfigType {
     token: string
     environment: string
@@ -9,4 +11,12 @@ export interface WidgetConfigType {
 export interface StoreContextType {
     widgetConfig: WidgetConfigType | null;
     setWidgetConfigAction: (config: WidgetConfigType) => void;
+    isDarkMode: boolean;
+    setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
+    isAuthenticated: boolean;
+    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface StoreProviderProps {
+    children: ReactNode;
 }
