@@ -1,11 +1,10 @@
 import Icon from '@react-native-vector-icons/fontawesome6';
 import React, { useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
-import { TextInput, Title, useTheme, Button } from 'react-native-paper';
-import { Support } from '../components/support';
+import { View, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { TextInput, Title, Button } from 'react-native-paper';
+import { LoginProps } from '../types/widget.interface';
 
-const LoginScreen = ({ onLogin }) => {
-    const { colors } = useTheme();
+const LoginScreen = ({ onLogin } : LoginProps) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);

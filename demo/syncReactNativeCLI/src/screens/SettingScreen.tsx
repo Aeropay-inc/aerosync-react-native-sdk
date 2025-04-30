@@ -86,7 +86,7 @@ export default function SettingScreen() {
 
             {/* Environment */}
             <View style={styles.formElement}>
-                <Text variant="bodyLarge">Environment *</Text>
+                <Text variant="bodyLarge">Environment</Text>
                 <DropDownPicker
                     open={open}
                     value={selectedEnv}

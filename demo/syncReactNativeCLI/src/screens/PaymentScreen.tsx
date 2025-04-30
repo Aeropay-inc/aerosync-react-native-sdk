@@ -1,8 +1,9 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useStore } from "../context/StoreContext";
 import { Button, RadioButton, useTheme } from "react-native-paper";
 import { useState } from "react";
 import Icon from "@react-native-vector-icons/fontawesome6";
+import AeroSyncWidget from "../components/AeroSyncWidget";
 
 
 export default function PaymentScreen() {
@@ -10,62 +11,72 @@ export default function PaymentScreen() {
     const theme = useTheme();
     const [checked, setChecked] = useState('bank');
     const [isCardEnabled, setIsCardEnabled] = useState(false);
+    const [isWidgetEnabled, setIsWidgetEnabled] = useState(false);
+
+    const openWidget = () => {
+      setIsWidgetEnabled(true)
+    }
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            <Text style={[styles.title, { color: theme.colors.text }]}>Select a payment method</Text>
+      <SafeAreaView style={{ flex: 1 }}>
+          {isWidgetEnabled ? (
+              <AeroSyncWidget onWidgetClose={() => setIsWidgetEnabled(false)} />
+              ) : (
+                <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+                  <Text style={[styles.title, { color: theme.colors.text }]}>Select a payment method</Text>
 
-            <View style={styles.splitContainer}>
-                <View style={styles.leftSide}>
-                <Text style={[styles.carDetails, { color: theme.colors.text }]}>
-                    2023 Cadillac CT5 {'\n'}
-                    Premium Luxury 4D {'\n'}
-                    Sedan Gas
-                </Text>
+                  <View style={styles.splitContainer}>
+                      <View style={styles.leftSide}>
+                      <Text style={[styles.carDetails, { color: theme.colors.text }]}>
+                          2023 Cadillac CT5
+                      </Text>
+                      <Text style={styles.smallText}>Premium Luxury 4D</Text>
+                      <Text style={styles.smallText}>Sedan Gas</Text>
+                      </View>
+                      <View style={styles.rightSide}>
+                      <Image
+                          source={require('../assets/image/cadillac.png')}
+                          style={styles.image}
+                      />
+                      </View>
+                  </View>
+
+                  <View style={styles.radioButtonContainer}>
+                      <RadioButton
+                      value="bank"
+                      status={checked === 'bank' ? 'checked' : 'unchecked'}
+                      onPress={() => setChecked('bank')}
+                      />
+                      <Text style={{ color: theme.colors.text }}>Pay by bank instantly and save 3%</Text>
+                  </View>
+
+                  <Button mode="contained"  style={styles.linkButton} onPress={openWidget}>
+                      <View style={{ flexDirection: 'row', marginRight: 20, gap: 15 }}>
+                          <Icon name="credit-card" iconStyle="solid" size={18} />    
+                          <Text style={[styles.buttonText, { color: theme.colors.text }]}>Link new bank</Text>
+                          <Icon name="user" iconStyle="solid" size={18} />    
+                      </View>
+                  </Button>            
+
+                  <View style={styles.radioButtonContainer}>
+                      <RadioButton
+                      value="card"
+                      status={checked === 'card' ? 'checked' : 'unchecked'}
+                      onPress={() => setChecked('card')}
+                      disabled={!isCardEnabled}
+                      />
+                      <Text style={[[{ color: theme.colors.text }, isCardEnabled ? null : styles.disabledText]]}>
+                      Credit/Debit card
+                      </Text>
+                  </View>
+
+                  <Button mode="contained"  style={styles.submitButton} disabled={true}>
+                      Next: review
+                  </Button>            
                 </View>
-                <View style={styles.rightSide}>
-                <Image
-                    source={require('../assets/image/cadillac.png')}
-                    style={styles.image}
-                />
-                </View>
-            </View>
-
-            <View style={styles.radioButtonContainer}>
-                <RadioButton
-                value="bank"
-                status={checked === 'bank' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('bank')}
-                />
-                <Text style={{ color: theme.colors.text }}>Pay by bank instantly and save 3%</Text>
-            </View>
-
-            <Button mode="contained"  style={styles.linkButton} disabled={true}>
-                <View style={{ flexDirection: 'row', marginRight: 20, gap: 15 }}>
-                    <Icon name="credit-card" iconStyle="solid" size={18} />    
-                    <Text style={[styles.buttonText, { color: theme.colors.text }]}>Link new bank</Text>
-                    <Icon name="user" iconStyle="solid" size={18} />    
-                </View>
-            </Button>            
-
-            {/* Radio button for "Credit/Debit card" */}
-            <View style={styles.radioButtonContainer}>
-                <RadioButton
-                value="card"
-                status={checked === 'card' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('card')}
-                disabled={!isCardEnabled} // Disable if isCardEnabled is false
-                />
-                <Text style={[[{ color: theme.colors.text }, isCardEnabled ? null : styles.disabledText]]}>
-                Credit/Debit card
-                </Text>
-            </View>
-
-            <Button mode="contained"  style={styles.submitButton} disabled={true}>
-                Next: review
-            </Button>
-
-        </View>
+          )}
+          
+      </SafeAreaView>
     );
 }
 
@@ -131,5 +142,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 60,
         backgroundColor: '#80bfff'    
-      }
+      },
+      smallText: {
+        fontSize: 12,
+        fontWeight: '300', 
+        color: '#777',
+      },
   });

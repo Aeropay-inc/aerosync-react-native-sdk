@@ -20,3 +20,11 @@ export interface StoreContextType {
 export interface StoreProviderProps {
     children: ReactNode;
 }
+
+export type AeroSyncWidgetProps = {
+    onWidgetClose: () => void;
+}
+
+export type LoginProps = {
+    onLogin: () => void;
+}
