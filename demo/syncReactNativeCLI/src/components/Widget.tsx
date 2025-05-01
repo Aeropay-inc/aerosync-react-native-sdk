@@ -42,12 +42,8 @@ export default function Widget({onWidgetClose, onBankLink}: AeroSyncWidgetProps)
             {...(widgetConfig?.stateCode ? {stateCode: widgetConfig.stateCode}: {})}
             {...(widgetConfig?.configurationId ? {configurationId: widgetConfig.configurationId}: {})}
             {...(widgetConfig?.aeroPassUserUuid ? {aeroPassUserUuid: widgetConfig.aeroPassUserUuid}: {})}
-            limitsNavigationsToAppBoundDomains={false}
-            style={{
-                width: '100%',
-                height: '100%',
-                opacity: 1,
-                bgColor: '#FFFFFF',
+            customWebViewProps={{
+              style:{ marginTop: 30 }
             }}
         />
     );

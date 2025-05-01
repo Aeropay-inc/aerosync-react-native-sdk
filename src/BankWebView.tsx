@@ -40,6 +40,7 @@ export function BankWebView( params : AeroSyncWebViewProps) {
             deeplink: params.deeplink ?? '',
           },
         }}
+        {...(isWidget ?( params.customWebViewProps || {}) : {})}
         onMessage={(event) => {
             try {
                 const r = JSON.parse(event.nativeEvent.data);
@@ -87,7 +88,7 @@ export function BankWebView( params : AeroSyncWebViewProps) {
           try {
             Linking.openURL(targetUrl);
           } catch (error) {
-            params.onError(`Unable open the URL in the external browser: ${error}`);
+            params.onError?.(`Unable open the URL in the external browser: ${error}`);
           }
         }}
       />        
