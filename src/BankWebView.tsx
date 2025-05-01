@@ -5,16 +5,18 @@ import { constructUrl } from './utils/urlUtils';
 
 
 export function BankWebView( params : AeroSyncWebViewProps) {
-
+    const isWidget = params.type === 'widget';
+    const isEmbedded = params.type === 'embedded';
     const urlParameters = {
         token: params.token,
         deeplink: params.deeplink,
         consumerId: params.consumerId,
-        ...((params.type === 'widget') ? {
+        ...((isWidget) ? {
             manualLinkOnly: params.manualLinkOnly,
             handleMFA: params.handleMFA,
             jobId: params.jobId,
-            userId: params.userId            
+            userId: params.userId,
+            stateCode: params.stateCode            
         }: {})
     }
 
@@ -23,7 +25,7 @@ export function BankWebView( params : AeroSyncWebViewProps) {
         params.onError?.('Invalid environment specified.');
         return null;
     }
-    if(params.type === 'embedded') {
+    if(isEmbedded) {
       baseUrl = `${baseUrl}/embedded-view`;
     }
     
@@ -43,19 +45,29 @@ export function BankWebView( params : AeroSyncWebViewProps) {
                 const r = JSON.parse(event.nativeEvent.data);
                 switch (r.type) {
                   case 'pageSuccess':
-                      (params.type === 'widget') && params?.onSuccess(r.payload);
+                      if (isWidget && r?.payload) {
+                        params?.onSuccess(r.payload);
+                      }
                     break;
                   case 'widgetClose':
-                      (params.type === 'widget') && params?.onClose();
+                      if (isWidget) {
+                        params?.onClose();
+                      }
                     break;
                   case 'widgetPageLoaded':
-                      (params.type === 'widget') && params?.onEvent(r.payload);
+                      if (isWidget && r?.payload) {
+                        params?.onEvent(r.payload);
+                      }
                     break;
                   case 'widgetError':
-                      (params.type === 'widget') && params?.onError(r.payload);
+                      if (isWidget && r?.payload) {
+                        params?.onError(r.payload);
+                      }
                     break;
                     case 'widgetBankClick':
-                      (params.type === 'embedded') && params?.onBankClick();
+                      if (isEmbedded && r?.payload) {
+                        params?.onBankClick(r.payload)
+                      }
                     break;  
           }
             } catch(e) {

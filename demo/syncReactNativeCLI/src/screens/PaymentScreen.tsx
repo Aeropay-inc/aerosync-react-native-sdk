@@ -1,7 +1,7 @@
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useStore } from "../context/StoreContext";
 import { Button, RadioButton, useTheme } from "react-native-paper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "@react-native-vector-icons/fontawesome6";
 import Widget from "../components/Widget";
 import Toast from "react-native-toast-message";
@@ -28,70 +28,81 @@ export default function PaymentScreen() {
       setIsWidgetEnabled(true)
     }
 
+    const handleBankLinkSuccess = () => {
+      setIsWidgetEnabled(false);
+      Toast.show({
+        type: 'success',
+        text1: 'Bank linked successfully!.',
+        });
+    }
+
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={[{ backgroundColor: theme.colors.background }, { flex: 1 }]}>
           { isWidgetEnabled ? (
-              <Widget onWidgetClose={() => setIsWidgetEnabled(false)} />
-              ) : (
-                <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-                  <Text style={[styles.title, { color: theme.colors.text }]}>Select a payment method</Text>
+              <Widget onWidgetClose={() => setIsWidgetEnabled(false)} 
+                      onBankLink={()=> handleBankLinkSuccess()}/>
+              ): (
+                <ScrollView>
+                  <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+                    <Text style={[styles.title, { color: theme.colors.text }]}>Select a payment method</Text>
 
-                  <View style={styles.splitContainer}>
-                      <View style={styles.leftSide}>
-                      <Text style={[styles.carDetails, { color: theme.colors.text }]}>
-                          2023 Cadillac CT5
-                      </Text>
-                      <Text style={styles.smallText}>Premium Luxury 4D</Text>
-                      <Text style={styles.smallText}>Sedan Gas</Text>
-                      </View>
-                      <View style={styles.rightSide}>
-                      <Image
-                          source={require('../assets/image/cadillac.png')}
-                          style={styles.image}
-                      />
-                      </View>
-                  </View>
-
-                  <View style={styles.radioButtonContainer}>
-                      <RadioButton
-                      value="bank"
-                      status={checked === 'bank' ? 'checked' : 'unchecked'}
-                      onPress={() => setChecked('bank')}
-                      />
-                      <Text style={{ color: theme.colors.text }}>Pay by bank instantly and save 3%</Text>
-                  </View>
-
-                  { widgetConfig?.isEmbeddedFlow ? (
-                    <View style={styles.emeddedView}>
-                      <Embedded />
+                    <View style={styles.splitContainer}>
+                        <View style={styles.leftSide}>
+                        <Text style={[styles.carDetails, { color: theme.colors.text }]}>
+                            2023 Cadillac CT5
+                        </Text>
+                        <Text style={styles.smallText}>Premium Luxury 4D</Text>
+                        <Text style={styles.smallText}>Sedan Gas</Text>
+                        </View>
+                        <View style={styles.rightSide}>
+                        <Image
+                            source={require('../assets/image/cadillac.png')}
+                            style={styles.image}
+                        />
+                        </View>
                     </View>
-                  ) : <Button mode="contained"  style={styles.linkButton} onPress={openWidget}>
-                      <View style={{ flexDirection: 'row', marginRight: 20, gap: 15 }}>
-                          <Icon name="credit-card" iconStyle="solid" size={18} />    
-                          <Text style={[styles.buttonText, { color: theme.colors.text }]}>Link new bank</Text>
-                          <Icon name="user" iconStyle="solid" size={18} />    
+
+                    <View style={styles.radioButtonContainer}>
+                        <RadioButton
+                        value="bank"
+                        status={checked === 'bank' ? 'checked' : 'unchecked'}
+                        onPress={() => setChecked('bank')}
+                        />
+                        <Text style={{ color: theme.colors.text }}>Pay by bank instantly and save 3%</Text>
+                    </View>
+
+                    { widgetConfig?.isEmbeddedFlow ? (
+                      <View style={styles.emeddedView}>
+                        <Embedded onWidgetBankClick={()=> setIsWidgetEnabled(true)} />
                       </View>
-                    </Button> }           
+                    ) : <Button mode="contained"  style={styles.linkButton} onPress={openWidget}>
+                        <View style={{ flexDirection: 'row', marginRight: 20, gap: 15 }}>
+                            <Icon name="credit-card" iconStyle="solid" size={18} />    
+                            <Text style={[styles.buttonText, { color: theme.colors.text }]}>Link new bank</Text>
+                            <Icon name="user" iconStyle="solid" size={18} />    
+                        </View>
+                      </Button> }           
 
-                  <View style={styles.radioButtonContainer}>
-                      <RadioButton
-                      value="card"
-                      status={checked === 'card' ? 'checked' : 'unchecked'}
-                      onPress={() => setChecked('card')}
-                      disabled={!isCardEnabled}
-                      />
-                      <Text style={[[{ color: theme.colors.text }, isCardEnabled ? null : styles.disabledText]]}>
-                      Credit/Debit card
-                      </Text>
+                    <View style={styles.radioButtonContainer}>
+                        <RadioButton
+                        value="card"
+                        status={checked === 'card' ? 'checked' : 'unchecked'}
+                        onPress={() => setChecked('card')}
+                        disabled={!isCardEnabled}
+                        />
+                        <Text style={[[{ color: theme.colors.text }, isCardEnabled ? null : styles.disabledText]]}>
+                        Credit/Debit card
+                        </Text>
+                    </View>
+
+                    <Button mode="contained"  style={styles.submitButton} disabled={true}>
+                        Next: review
+                    </Button>            
                   </View>
-
-                  <Button mode="contained"  style={styles.submitButton} disabled={true}>
-                      Next: review
-                  </Button>            
-                </View>
+                </ScrollView>
           )}
           
-      </SafeAreaView>
+        </SafeAreaView>
     );
 }
 
@@ -165,6 +176,8 @@ const styles = StyleSheet.create({
       },
       emeddedView: {
         marginBottom: 20,
-        height: 350
+        height: 350,
+        borderWidth: 1,
+        borderColor: '#E0E0E0',
       }
   });

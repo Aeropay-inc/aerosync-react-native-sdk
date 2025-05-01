@@ -3,7 +3,7 @@ import { useStore } from "../context/StoreContext";
 import { AeroSyncWidgetProps } from "../types/widget.interface";
 
 
-export default function Widget({onWidgetClose}: AeroSyncWidgetProps) {
+export default function Widget({onWidgetClose, onBankLink}: AeroSyncWidgetProps) {
 
     const { widgetConfig } = useStore();
 
@@ -17,9 +17,8 @@ export default function Widget({onWidgetClose}: AeroSyncWidgetProps) {
       };
     
       const onSuccess = (event: SuccessEventType) => {
-        // setoutput(JSON.stringify(event));
         console.log('onSuccess', event);
-        onWidgetClose?.();
+        onBankLink?.();
       };
     
       const onEvent = (event: WidgetEventType) => {
@@ -40,9 +39,9 @@ export default function Widget({onWidgetClose}: AeroSyncWidgetProps) {
             token={widgetConfig!.token}
             deeplink="testaerosyncsample://"
             environment={(widgetConfig?.environment ?? 'dev') as Environment}
+            {...(widgetConfig?.stateCode ? {stateCode: widgetConfig.stateCode}: {})}
             {...(widgetConfig?.configurationId ? {configurationId: widgetConfig.configurationId}: {})}
             {...(widgetConfig?.aeroPassUserUuid ? {aeroPassUserUuid: widgetConfig.aeroPassUserUuid}: {})}
-            aeroPassUserUuid={widgetConfig!.aeroPassUserUuid}
             limitsNavigationsToAppBoundDomains={false}
             style={{
                 width: '100%',

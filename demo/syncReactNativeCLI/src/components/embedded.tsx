@@ -1,19 +1,24 @@
-import  { AeroSyncEmbeddedView, Environment, SuccessEventType, WidgetEventType } from "aerosync-react-native-sdk";
+import  { AeroSyncEmbeddedView, Environment, WidgetEventBankClickType } from "aerosync-react-native-sdk";
 import { useStore } from "../context/StoreContext";
-import Toast from 'react-native-toast-message';
-import { AeroSyncWidgetProps } from "../types/widget.interface";
+import { EmbeddedWidgetProps } from "../types/widget.interface";
 
 
-export default function Embedded() {
+export default function Embedded({onWidgetBankClick}: EmbeddedWidgetProps) {
 
-    const { widgetConfig } = useStore();
+    const { widgetConfig, setWidgetConfigAction } = useStore();
 
     const onLoad = () => {
         console.log('onLoad');
       };
 
-    const onBankClick = () => {
-      console.log('onBankClick');
+    const onBankClick = (event: WidgetEventBankClickType) => {
+      if(event.stateCode) {
+        setWidgetConfigAction({
+          ...widgetConfig!,
+          stateCode: event.stateCode
+        })
+        onWidgetBankClick()
+      }
     }; 
     
     const onError = (event: string) => {

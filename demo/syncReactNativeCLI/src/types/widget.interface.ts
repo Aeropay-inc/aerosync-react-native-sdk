@@ -6,6 +6,7 @@ export interface WidgetConfigType {
     configurationId: string
     aeroPassUserUuid: string
     isEmbeddedFlow: boolean
+    stateCode?: string
 }
 
 export interface StoreContextType {
@@ -23,6 +24,11 @@ export interface StoreProviderProps {
 
 export type AeroSyncWidgetProps = {
     onWidgetClose: () => void;
+    onBankLink: () => void;
+}
+
+export type EmbeddedWidgetProps = {
+    onWidgetBankClick: () => void;
 }
 
 export type LoginProps = {

@@ -24,6 +24,7 @@ export interface AeroSyncWidgetProps {
   handleMFA?: boolean;
   jobId?: string;
   userId?: string;
+  stateCode?: string,
   limitsNavigationsToAppBoundDomains?: boolean;
   style?: {
     bgColor: ColorValue;
@@ -35,8 +36,8 @@ export interface AeroSyncWidgetProps {
 
 export type AeroSyncEmbeddedProps = Pick<AeroSyncWidgetProps,
   'token' | 'onLoad' | 'onError' | 'consumerId' | 'environment' | 'deeplink'> & {
-    type: 'embedded'
-    onBankClick: () => void;
+    type: 'embedded',
+    onBankClick: (event: WidgetEventBankClickType) => void;
   }
 
 export type AeroSyncWebViewProps = AeroSyncWidgetProps | AeroSyncEmbeddedProps;
@@ -56,4 +57,8 @@ export interface SuccessEventType {
 export interface WidgetEventType {
   pageTitle: string;
   onLoadApi: string;
+}
+
+export interface WidgetEventBankClickType {
+  stateCode: string
 }
