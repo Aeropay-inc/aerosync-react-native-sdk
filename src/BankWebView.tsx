@@ -11,6 +11,7 @@ export function BankWebView( params : AeroSyncWebViewProps) {
         token: params.token,
         deeplink: params.deeplink,
         consumerId: params.consumerId,
+        defaultTheme: params.theme,
         ...((isWidget) ? {
             manualLinkOnly: params.manualLinkOnly,
             handleMFA: params.handleMFA,

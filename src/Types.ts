@@ -17,12 +17,13 @@ export interface AeroSyncWidgetProps {
   userId?: string;
   stateCode?: string,
   customWebViewProps?: CustomWebViewProps;
+  theme?: WidgetThemeType
 }
 
 export type CustomWebViewProps = Omit<WebViewProps, HiddenWebViewProps>
 
 export type AeroSyncEmbeddedProps = Pick<AeroSyncWidgetProps,
-  'token' | 'onLoad' | 'onError' | 'consumerId' | 'environment' | 'deeplink'> & {
+  'token' | 'onLoad' | 'onError' | 'consumerId' | 'environment' | 'deeplink' | 'theme'> & {
     type: 'embedded',
     onBankClick: (event: WidgetEventBankClickType) => void;
   }
@@ -58,6 +59,14 @@ export const env: { [key in Environment]: string } = {
   sandbox: 'https://sandbox.aerosync.com',
   production: 'https://sync.aero.inc',
 };
+
+const WidgetThemes = {
+  Light: 'light',
+  Dark: 'dark'
+} as const
+
+
+export type WidgetThemeType = typeof WidgetThemes[keyof typeof WidgetThemes]
 
 type HiddenWebViewProps =
   | 'onMessage'
