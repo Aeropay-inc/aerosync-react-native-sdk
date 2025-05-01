@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useStore } from "../context/StoreContext";
 import { Button, RadioButton, useTheme } from "react-native-paper";
 import { useEffect, useState } from "react";
@@ -6,6 +6,8 @@ import Icon from "@react-native-vector-icons/fontawesome6";
 import Widget from "../components/Widget";
 import Toast from "react-native-toast-message";
 import Embedded from "../components/embedded";
+import Modal from 'react-native-modal';
+const { height } = Dimensions.get('window');
 
 
 export default function PaymentScreen() {
@@ -39,8 +41,15 @@ export default function PaymentScreen() {
     return (
       <SafeAreaView style={[{ backgroundColor: theme.colors.background }, { flex: 1 }]}>
           { isWidgetEnabled ? (
-              <Widget onWidgetClose={() => setIsWidgetEnabled(false)} 
-                      onBankLink={()=> handleBankLinkSuccess()}/>
+                <Modal
+                  style={styles.modal}
+                  isVisible={true}
+                  propagateSwipe
+                >
+                  <Widget onWidgetClose={() => setIsWidgetEnabled(false)} 
+                          onBankLink={()=> handleBankLinkSuccess()
+                    }/>
+                </Modal>
               ): (
                 <ScrollView>
                   <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -179,5 +188,9 @@ const styles = StyleSheet.create({
         height: 350,
         borderWidth: 1,
         borderColor: '#E0E0E0',
-      }
+      },
+      modal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+      },
   });
