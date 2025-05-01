@@ -41,6 +41,7 @@ export default function Widget({onWidgetClose, onBankLink}: AeroSyncWidgetProps)
             theme={isDarkTheme? 'dark' : 'light'}
             token={widgetConfig!.token}
             deeplink="syncroVibeReactCli://"
+            consumerId={widgetConfig?.configurationId}
             environment={(widgetConfig?.environment ?? 'dev') as Environment}
             {...(widgetConfig?.stateCode ? {stateCode: widgetConfig.stateCode}: {})}
             {...(widgetConfig?.configurationId ? {configurationId: widgetConfig.configurationId}: {})}
