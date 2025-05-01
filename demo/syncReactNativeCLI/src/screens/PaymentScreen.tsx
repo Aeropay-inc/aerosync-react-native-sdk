@@ -45,6 +45,10 @@ export default function PaymentScreen() {
                   style={styles.modal}
                   isVisible={true}
                   propagateSwipe
+                  animationIn="slideInUp"
+                  animationOut="slideOutDown"
+                  animationInTiming={600}
+                  animationOutTiming={600}
                 >
                   <Widget onWidgetClose={() => setIsWidgetEnabled(false)} 
                           onBankLink={()=> handleBankLinkSuccess()
