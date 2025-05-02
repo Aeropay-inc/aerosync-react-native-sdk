@@ -77,12 +77,7 @@ export function BankWebView( params : AeroSyncWebViewProps) {
             }            
                 
         }}
-        // ref={(webView) => (webViewRef = webView)}
         onLoad={() => params?.onLoad()}
-        // onNavigationStateChange={handleNavigationStateChange}
-        // limitsNavigationsToAppBoundDomains={
-        //   limitsNavigationsToAppBoundDomains ?? false
-        // }
         onOpenWindow={(syntheticEvent) => {
           const { nativeEvent } = syntheticEvent;
           const { targetUrl } = nativeEvent;
