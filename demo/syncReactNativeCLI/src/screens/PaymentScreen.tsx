@@ -58,14 +58,15 @@ export default function PaymentScreen() {
             <View style={styles.splitContainer}>
                 <View style={styles.leftSide}>
                 <Text style={[styles.carDetails, { color: theme.colors.text }]}>
-                    2023 Cadillac CT5
+                  KTM RC 200
                 </Text>
-                <Text style={styles.smallText}>Premium Luxury 4D</Text>
-                <Text style={styles.smallText}>Sedan Gas</Text>
+                <Text style={styles.smallText}>200 cc liquid-cooled</Text>
+                <Text style={styles.smallText}>single-cylinder</Text>
+                <Text style={styles.smallText}>four-stroke engine</Text>
                 </View>
                 <View style={styles.rightSide}>
                 <Image
-                    source={require('../assets/image/cadillac.png')}
+                    source={require('../assets/image/ktm.png')}
                     style={styles.image}
                 />
                 </View>
