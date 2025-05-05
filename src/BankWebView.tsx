@@ -1,14 +1,15 @@
 import { WebView } from 'react-native-webview';
-import { env, type AeroSyncWebViewProps } from './Types';
+import { env, type AeroSyncWebViewProps, type WidgetPostMessageOnClose, type WidgetPostMessageOnSuccess } from './Types';
 import { Linking } from 'react-native';
 import { constructUrl } from './utils/urlUtils';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import AeroSyncSDK from './AeroSyncSDK';
+import { postMessageToWebView } from './utils/webviewHelpers';
 
 export function BankWebView( {type, props}: AeroSyncWebViewProps) {
-    const webViewRef = useRef(null);
     const isWidget = type === 'widget';
     const isEmbedded = type === 'embedded';
-
+    const webViewRef = useRef<WebView>(null);
     const { 
       token = null, 
       deeplink = null,
@@ -18,7 +19,6 @@ export function BankWebView( {type, props}: AeroSyncWebViewProps) {
       onLoad = () => {},
       onError = () => {}
     } =  props;
-
     const urlParameters = {
         token: token,
         deeplink: deeplink,
@@ -32,6 +32,15 @@ export function BankWebView( {type, props}: AeroSyncWebViewProps) {
             stateCode: props.stateCode            
         }: {})
     }
+
+    useEffect(() => {
+      if(isWidget && webViewRef.current) {
+        AeroSyncSDK.setWidgetWebViewRef(webViewRef);
+      } 
+      if(isEmbedded && webViewRef.current) {
+        AeroSyncSDK.setEmbeddedWebViewRef(webViewRef);
+      } 
+    }, [isWidget, isEmbedded])
 
     let baseUrl = env[environment];
     if(isEmbedded) {
@@ -54,11 +63,28 @@ export function BankWebView( {type, props}: AeroSyncWebViewProps) {
                 const r = JSON.parse(event.nativeEvent.data);
                 switch (r.type) {
                   case 'pageSuccess':
+                      // embedded event
+                      if(AeroSyncSDK?.getEmbeddedWebViewRef?.current) {
+                        const message: WidgetPostMessageOnSuccess = {
+                          type: 'embeddedView',
+                          payload: { name: 'onSuccess' }
+                        }
+                        postMessageToWebView(AeroSyncSDK.getEmbeddedWebViewRef, message)
+                      }                    
                       if (isWidget && r?.payload) {
                         props.onSuccess(r.payload);
+                        AeroSyncSDK.clear();
                       }
                     break;
                   case 'widgetClose':
+                      // embedded event
+                      if(AeroSyncSDK?.getEmbeddedWebViewRef?.current) {
+                        const message: WidgetPostMessageOnClose = {
+                          type: 'embeddedView',
+                          payload: { name: 'onClose' }
+                        }
+                        postMessageToWebView(AeroSyncSDK.getEmbeddedWebViewRef, message)
+                      }
                       if (isWidget) {
                         props.onClose();
                       }

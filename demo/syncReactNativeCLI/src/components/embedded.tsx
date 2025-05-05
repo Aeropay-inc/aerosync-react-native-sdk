@@ -2,6 +2,7 @@ import  { AeroSyncEmbeddedView, Environment, WidgetEventBankClickType } from "ae
 import { useStore } from "../context/StoreContext";
 import { EmbeddedWidgetProps } from "../types/widget.interface";
 import { useThemeContext } from "../context/ThemeContext";
+import { DEEPLINK } from "../constants/configs";
 
 
 export default function Embedded({onWidgetBankClick}: EmbeddedWidgetProps) {
@@ -34,7 +35,7 @@ export default function Embedded({onWidgetBankClick}: EmbeddedWidgetProps) {
             onError={onError}
             theme={isDarkTheme? 'dark' : 'light'}
             token={widgetConfig!.token}
-            deeplink="testaerosyncsample://"
+            deeplink={DEEPLINK}
             consumerId={widgetConfig?.configurationId}
             environment={(widgetConfig?.environment ?? 'dev') as Environment}
             {...(widgetConfig?.configurationId ? {configurationId: widgetConfig.configurationId}: {})}

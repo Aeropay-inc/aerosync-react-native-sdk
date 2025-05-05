@@ -3,10 +3,14 @@ import { WebView } from 'react-native-webview';
 import type { WidgetPostMessageEvent } from '../Types';
 
 export const postMessageToWebView = (
-    webViewRef: RefObject<WebView>,
+    webViewRef: RefObject<WebView | null>,
     message: WidgetPostMessageEvent
 ): void => {
     if (webViewRef?.current) {
-        webViewRef.current.postMessage(JSON.stringify(message));
+        const jsToInject = `
+            window.postMessage(${JSON.stringify(message)}, '*');
+            true;
+        `;
+        webViewRef.current.injectJavaScript(jsToInject);
     }
 };

@@ -38,82 +38,79 @@ export default function PaymentScreen() {
 
     return (
       <SafeAreaView style={[{ backgroundColor: theme.colors.background }, { flex: 1 }]}>
-          { isWidgetEnabled ? (
-                <Modal
-                  style={styles.modal}
-                  isVisible={true}
-                  propagateSwipe
-                  animationIn="slideInUp"
-                  animationOut="slideOutDown"
-                  animationInTiming={600}
-                  animationOutTiming={600}
-                >
-                  <Widget onWidgetClose={() => setIsWidgetEnabled(false)} 
-                          onBankLink={()=> handleBankLinkSuccess()
-                    }/>
-                </Modal>
-              ): (
-                <ScrollView>
-                  <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-                    <Text style={[styles.title, { color: theme.colors.text }]}>Select a payment method</Text>
+        
+        <Modal
+          style={styles.modal}
+          isVisible={isWidgetEnabled}
+          propagateSwipe
+          animationIn="slideInUp"
+          animationOut="slideOutDown"
+          animationInTiming={600}
+          animationOutTiming={600}
+        >
+          <Widget onWidgetClose={() => setIsWidgetEnabled(false)} 
+                  onBankLink={()=> handleBankLinkSuccess() }/>
+        </Modal>
+        <ScrollView>
+          <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+            <Text style={[styles.title, { color: theme.colors.text }]}>Select a payment method</Text>
 
-                    <View style={styles.splitContainer}>
-                        <View style={styles.leftSide}>
-                        <Text style={[styles.carDetails, { color: theme.colors.text }]}>
-                            2023 Cadillac CT5
-                        </Text>
-                        <Text style={styles.smallText}>Premium Luxury 4D</Text>
-                        <Text style={styles.smallText}>Sedan Gas</Text>
-                        </View>
-                        <View style={styles.rightSide}>
-                        <Image
-                            source={require('../assets/image/cadillac.png')}
-                            style={styles.image}
-                        />
-                        </View>
-                    </View>
+            <View style={styles.splitContainer}>
+                <View style={styles.leftSide}>
+                <Text style={[styles.carDetails, { color: theme.colors.text }]}>
+                    2023 Cadillac CT5
+                </Text>
+                <Text style={styles.smallText}>Premium Luxury 4D</Text>
+                <Text style={styles.smallText}>Sedan Gas</Text>
+                </View>
+                <View style={styles.rightSide}>
+                <Image
+                    source={require('../assets/image/cadillac.png')}
+                    style={styles.image}
+                />
+                </View>
+            </View>
 
-                    <View style={styles.radioButtonContainer}>
-                        <RadioButton
-                        value="bank"
-                        status={checked === 'bank' ? 'checked' : 'unchecked'}
-                        onPress={() => setChecked('bank')}
-                        />
-                        <Text style={{ color: theme.colors.text }}>Pay by bank instantly and save 3%</Text>
-                    </View>
+            <View style={styles.radioButtonContainer}>
+                <RadioButton
+                value="bank"
+                status={checked === 'bank' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('bank')}
+                />
+                <Text style={{ color: theme.colors.text }}>Pay by bank instantly and save 3%</Text>
+            </View>
 
-                    { widgetConfig?.isEmbeddedFlow ? (
-                      <View style={styles.emeddedView}>
-                        <Embedded onWidgetBankClick={()=> setIsWidgetEnabled(true)} />
-                      </View>
-                    ) : <Button mode="contained"  style={styles.linkButton} onPress={openWidget}>
-                        <View style={{ flexDirection: 'row', marginRight: 20, gap: 15 }}>
-                            <Icon name="credit-card" iconStyle="solid" size={18} />    
-                            <Text style={[styles.buttonText, { color: theme.colors.text }]}>Link new bank</Text>
-                            <Icon name="user" iconStyle="solid" size={18} />    
-                        </View>
-                      </Button> }           
+            { widgetConfig?.isEmbeddedFlow ? (
+              <View style={styles.emeddedView}>
+                <Embedded onWidgetBankClick={()=> setIsWidgetEnabled(true)} />
+              </View>
+            ) : <Button mode="contained"  style={styles.linkButton} onPress={openWidget}>
+                <View style={{ flexDirection: 'row', marginRight: 20, gap: 15 }}>
+                    <Icon name="credit-card" iconStyle="solid" size={18} />    
+                    <Text style={[styles.buttonText, { color: theme.colors.text }]}>Link new bank</Text>
+                    <Icon name="user" iconStyle="solid" size={18} />    
+                </View>
+              </Button> }           
 
-                    <View style={styles.radioButtonContainer}>
-                        <RadioButton
-                        value="card"
-                        status={checked === 'card' ? 'checked' : 'unchecked'}
-                        onPress={() => setChecked('card')}
-                        disabled={!isCardEnabled}
-                        />
-                        <Text style={[[{ color: theme.colors.text }, isCardEnabled ? null : styles.disabledText]]}>
-                        Credit/Debit card
-                        </Text>
-                    </View>
+            <View style={styles.radioButtonContainer}>
+                <RadioButton
+                value="card"
+                status={checked === 'card' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('card')}
+                disabled={!isCardEnabled}
+                />
+                <Text style={[[{ color: theme.colors.text }, isCardEnabled ? null : styles.disabledText]]}>
+                Credit/Debit card
+                </Text>
+            </View>
 
-                    <Button mode="contained"  style={styles.submitButton} disabled={true}>
-                        Next: review
-                    </Button>            
-                  </View>
-                </ScrollView>
-          )}
+            <Button mode="contained"  style={styles.submitButton} disabled={true}>
+                Next: review
+            </Button>            
+          </View>
+        </ScrollView>
           
-        </SafeAreaView>
+      </SafeAreaView>
     );
 }
 
