@@ -2,6 +2,7 @@ import  { AeroSyncWidget, Environment, SuccessEventType, WidgetEventType } from 
 import { useStore } from "../context/StoreContext";
 import { AeroSyncWidgetProps } from "../types/widget.interface";
 import { useThemeContext } from "../context/ThemeContext";
+import { DEEPLINK } from "../constants/configs";
 
 
 export default function Widget({onWidgetClose, onBankLink}: AeroSyncWidgetProps) {
@@ -40,7 +41,7 @@ export default function Widget({onWidgetClose, onBankLink}: AeroSyncWidgetProps)
             onSuccess={onSuccess}
             theme={isDarkTheme? 'dark' : 'light'}
             token={widgetConfig!.token}
-            deeplink="syncroVibeReactCli://"
+            deeplink={DEEPLINK}
             consumerId={widgetConfig?.configurationId}
             environment={(widgetConfig?.environment ?? 'dev') as Environment}
             {...(widgetConfig?.stateCode ? {stateCode: widgetConfig.stateCode}: {})}

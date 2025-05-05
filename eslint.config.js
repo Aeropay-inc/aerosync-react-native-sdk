@@ -34,8 +34,9 @@ export default [
       'react-hooks/exhaustive-deps': 'off',
       'react-native/sort-styles': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
-      "react/react-in-jsx-scope": "off",
-      "@typescript-eslint/no-unused-vars": 'off'
+      'react/react-in-jsx-scope': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unnecessary-type-constraint': 'off'
     },
     settings: {
       react: {

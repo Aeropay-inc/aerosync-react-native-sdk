@@ -2,35 +2,41 @@ import { WebView } from 'react-native-webview';
 import { env, type AeroSyncWebViewProps } from './Types';
 import { Linking } from 'react-native';
 import { constructUrl } from './utils/urlUtils';
+import { useRef } from 'react';
 
+export function BankWebView( {type, props}: AeroSyncWebViewProps) {
+    const webViewRef = useRef(null);
+    const isWidget = type === 'widget';
+    const isEmbedded = type === 'embedded';
 
-export function BankWebView( params : AeroSyncWebViewProps) {
-    const isWidget = params.type === 'widget';
-    const isEmbedded = params.type === 'embedded';
+    const { 
+      token = null, 
+      deeplink = null,
+      consumerId = null,
+      theme = 'light',
+      environment = 'production',
+      onLoad = () => {},
+      onError = () => {}
+    } =  props;
+
     const urlParameters = {
-        token: params.token,
-        deeplink: params.deeplink,
-        consumerId: params.consumerId,
-        defaultTheme: params.theme,
+        token: token,
+        deeplink: deeplink,
+        consumerId: consumerId,
+        defaultTheme: theme,
         ...((isWidget) ? {
-            manualLinkOnly: params.manualLinkOnly,
-            handleMFA: params.handleMFA,
-            jobId: params.jobId,
-            userId: params.userId,
-            stateCode: params.stateCode            
+            manualLinkOnly: props.manualLinkOnly ?? false,
+            handleMFA: props.handleMFA,
+            jobId: props.jobId,
+            userId: props.userId,
+            stateCode: props.stateCode            
         }: {})
     }
 
-    let baseUrl = env[params.environment];
-    if (!baseUrl) {
-        params.onError?.('Invalid environment specified.');
-        return null;
-    }
+    let baseUrl = env[environment];
     if(isEmbedded) {
       baseUrl = `${baseUrl}/embedded-view`;
     }
-    
-
     let source = constructUrl(baseUrl, urlParameters)
 
     return (
@@ -38,53 +44,54 @@ export function BankWebView( params : AeroSyncWebViewProps) {
         source={{
           uri: source,
           headers: {
-            deeplink: params.deeplink ?? '',
+            deeplink: deeplink,
           },
         }}
-        {...(isWidget ?( params.customWebViewProps || {}) : {})}
+        {...(isWidget ?( props.customWebViewProps || {}) : {})}
+        ref={webViewRef}
         onMessage={(event) => {
             try {
                 const r = JSON.parse(event.nativeEvent.data);
                 switch (r.type) {
                   case 'pageSuccess':
                       if (isWidget && r?.payload) {
-                        params?.onSuccess(r.payload);
+                        props.onSuccess(r.payload);
                       }
                     break;
                   case 'widgetClose':
                       if (isWidget) {
-                        params?.onClose();
+                        props.onClose();
                       }
                     break;
                   case 'widgetPageLoaded':
                       if (isWidget && r?.payload) {
-                        params?.onEvent(r.payload);
+                        props.onEvent(r.payload);
                       }
                     break;
                   case 'widgetError':
-                      if (isWidget && r?.payload) {
-                        params?.onError(r.payload);
+                      if (r?.payload) {
+                        onError(r.payload);
                       }
                     break;
                     case 'widgetBankClick':
                       if (isEmbedded && r?.payload) {
-                        params?.onBankClick(r.payload)
+                        props.onBankClick(r.payload)
                       }
                     break;  
           }
             } catch(e) {
-                params.onError?.(`Failed to parse WebView message: ${e}`);
+                onError(`Failed to parse WebView message: ${e}`)
             }            
                 
         }}
-        onLoad={() => params?.onLoad()}
+        onLoad={() => onLoad()}
         onOpenWindow={(syntheticEvent) => {
           const { nativeEvent } = syntheticEvent;
           const { targetUrl } = nativeEvent;
           try {
             Linking.openURL(targetUrl);
-          } catch (error) {
-            params.onError?.(`Unable open the URL in the external browser: ${error}`);
+          } catch (e) {
+            onError(`Unable open the URL in the external browser: ${e}`)
           }
         }}
       />        

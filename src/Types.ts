@@ -1,7 +1,6 @@
 import type { WebViewProps } from 'react-native-webview';
 
 export interface AeroSyncWidgetProps {
-  type: 'widget'
   token: string;
   onLoad: () => void;
   onError: (event: string) => void;
@@ -24,16 +23,12 @@ export type CustomWebViewProps = Omit<WebViewProps, HiddenWebViewProps>
 
 export type AeroSyncEmbeddedProps = Pick<AeroSyncWidgetProps,
   'token' | 'onLoad' | 'onError' | 'consumerId' | 'environment' | 'deeplink' | 'theme'> & {
-    type: 'embedded',
     onBankClick: (event: WidgetEventBankClickType) => void;
   }
 
-export type AeroSyncWebViewProps = AeroSyncWidgetProps | AeroSyncEmbeddedProps;
-
-export type AeroSyncWidgetInputProps = Omit<AeroSyncWidgetProps, 'type'>;
-
-export type AeroSyncEmbeddedInputProps = Omit<AeroSyncEmbeddedProps, 'type'>;
-
+export type AeroSyncWebViewProps =
+  | { type: 'widget', props: AeroSyncWidgetProps }
+  | { type: 'embedded', props: AeroSyncEmbeddedProps };
 
 export interface SuccessEventType {
   userId: string;
@@ -88,3 +83,17 @@ type HiddenWebViewProps =
   | 'onHttpError'
   | 'onSslError'
   | 'onRenderProcessGone';
+
+export const WidgetPostMessageTypes = {
+  EmbeddedView: 'embeddedView'
+} as const
+
+export type WidgetPostMessageType = typeof WidgetPostMessageTypes[keyof typeof WidgetPostMessageTypes]
+
+export type WidgetPostMessage<TType extends WidgetPostMessageType, TPayload extends unknown> =
+  TPayload extends undefined ? never : { type: TType, payload: TPayload }
+
+export type WidgetPostMessageOnClose = WidgetPostMessage<'embeddedView', { name: 'onClose' }>
+export type WidgetPostMessageOnSuccess = WidgetPostMessage<'embeddedView', { name: 'onSuccess' }>
+export type WidgetPostMessageOnToggleTheme = WidgetPostMessage<'embeddedView', { name: 'onToggleTheme', theme: WidgetThemeType }>
+export type WidgetPostMessageEvent = WidgetPostMessageOnSuccess | WidgetPostMessageOnClose | WidgetPostMessageOnToggleTheme

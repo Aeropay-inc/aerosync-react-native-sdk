@@ -1,14 +1,12 @@
-import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useStore } from "../context/StoreContext";
 import { Button, RadioButton, useTheme } from "react-native-paper";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Icon from "@react-native-vector-icons/fontawesome6";
 import Widget from "../components/Widget";
 import Toast from "react-native-toast-message";
 import Embedded from "../components/embedded";
 import Modal from 'react-native-modal';
-const { height } = Dimensions.get('window');
-
 
 export default function PaymentScreen() {
     const { widgetConfig } = useStore();

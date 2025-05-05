@@ -1,15 +1,15 @@
-import { type AeroSyncEmbeddedInputProps, type AeroSyncWidgetInputProps } from './Types';
+import { type AeroSyncEmbeddedProps, type AeroSyncWidgetProps } from './Types';
 import { BankWebView } from './BankWebView';
 
-export function AeroSyncWidget(options: AeroSyncWidgetInputProps) {
+export function AeroSyncWidget(options: AeroSyncWidgetProps) {
 
   return (
-    <BankWebView type='widget'  {...options} />
+    <BankWebView type='widget' props={options} />
   );
 }
 
-export function AeroSyncEmbeddedView(options: AeroSyncEmbeddedInputProps) {
+export function AeroSyncEmbeddedView(options: AeroSyncEmbeddedProps) {
   return (
-    <BankWebView type='embedded' {...options} />
+    <BankWebView type='embedded' props={options} />
   );
 }

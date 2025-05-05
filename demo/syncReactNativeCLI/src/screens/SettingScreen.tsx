@@ -3,7 +3,7 @@ import { useState } from "react";
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { TextInput, Button, Switch, Text, useTheme } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { env } from 'aerosync-react-native-sdk';
+import { env, Environment } from 'aerosync-react-native-sdk';
 import Toast from 'react-native-toast-message';
 
 export default function SettingScreen() {
@@ -31,7 +31,7 @@ export default function SettingScreen() {
         }
         const newConfig = {
             token: token,
-            environment: selectedEnv || 'dev',
+            environment: (selectedEnv || 'dev') as Environment,
             configurationId: configId,
             aeroPassUserUuid: aeroPassId,
             isEmbeddedFlow: isSwitchOn,

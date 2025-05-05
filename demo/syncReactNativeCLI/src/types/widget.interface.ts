@@ -1,8 +1,9 @@
+import { Environment } from "aerosync-react-native-sdk"
 import { ReactNode } from "react"
 
 export interface WidgetConfigType {
     token: string
-    environment: string
+    environment: Environment
     configurationId: string
     aeroPassUserUuid: string
     isEmbeddedFlow: boolean
