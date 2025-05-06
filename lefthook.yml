@@ -4,16 +4,16 @@ pre-commit:
     lint:
       files: git diff --name-only @{push}
       glob: '*.{js,ts,jsx,tsx}'
-      exclude: ^example/
-      run: npx eslint {files}
+      exclude: ^(sample|demo)/
+      run: npx eslint {files} --no-warn-ignored
     types:
       files: git diff --name-only @{push}
       glob: '*.{js,ts, jsx, tsx}'
-      exclude: ^example/
+      exclude: ^(sample|demo)/
       run: npx tsc
 commit-msg:
   parallel: true
   commands:
     commitlint:
-      exclude: ^example/
+      exclude: ^(sample|demo)/
       run: npx commitlint --edit
