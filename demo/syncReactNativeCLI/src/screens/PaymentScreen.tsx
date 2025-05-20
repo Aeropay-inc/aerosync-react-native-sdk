@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
       },
       emeddedView: {
         marginBottom: 20,
-        height: 350,
+        height: 358,
         borderWidth: 1,
         borderColor: '#E0E0E0',
       },
