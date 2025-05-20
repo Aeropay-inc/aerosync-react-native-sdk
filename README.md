@@ -2,214 +2,174 @@
 
 This React Native SDK provides an interface to load Aerosync-UI in React Native application. Securely link your bank account through your bank’s website. Log in with a fast, secure, and tokenized connection. Your information is never shared or sold.
 
-## Installation
+## 1. Install and Link Aerosync React Native SDK
+
+Install the `aerosync-react-native-sdk` library along with its required peer dependency, `react-native-webview`:
 
 ```sh
-npm install aerosync-react-native-sdk
+npm install aerosync-react-native-sdk react-native-webview
 ```
 
-## Usage
+Note: `react-native-webview` is a required peer dependency for `aerosync-react-native-sdk`.
 
-```js
-/**
- * Integrate AeroSync UI AddBank
- */
-/**
- * Sample App
- * https://github.com/Aeropay-inc/aerosync-react-native-sdk/blob/main/sample/App.tsx
- *
- * @format
- */
+### iOS Setup
 
-import React, {useState} from 'react';
-import BankLink, {
+1. Navigate to the ios directory and install CocoaPods dependencies:
+   `cd ios
+pod install`
+
+2. Ensure your iOS deployment target is **11.0 or higher**.
+
+### Android Setup
+
+1. Make sure the following permission is added to your `AndroidManifest.xml`, if required:
+   `<uses-permission android:name="android.permission.INTERNET" />`
+
+2. Autolinking should handle the native module setup automatically—no manual changes needed.
+
+## 2. Minimal example to implement Aerosync React Native Sdk
+
+```PaymentScreen.tsx
+
+import {
+  AeroSyncWidget,
   SuccessEventType,
   WidgetEventType,
-  Environment,
-} from 'aerosync-react-native-sdk';
-import DropDownPicker from 'react-native-dropdown-picker';
-import {
-  StyleSheet,
-  SafeAreaView,
-  Text,
-  View,
-  Alert,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+} from "aerosync-react-native-sdk";
 
-function App(): React.JSX.Element {
-  const [token, settoken] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [configurationId, setConfigurationId] = useState('');
-  const [aeroPassUserUuid, setAeroPassUserUuid] = useState('');
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('staging' as Environment);
-  const [output, setoutput] = useState('');
-  const [items, setItems] = useState([
-    {label: 'DEV', value: 'dev'},
-    {label: 'STAGING', value: 'staging'},
-    {label: 'SANDBOX', value: 'sandbox'},
-    {label: 'PRODUCTION', value: 'production'},
-  ]);
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import Toast from "react-native-toast-message";
+import Modal from 'react-native-modal';
+import { useStore } from "../context/StoreContext";
+import { useThemeContext } from "../context/ThemeContext";
+import { Button } from "react-native-paper";
 
-  const onLoad = () => {
-    console.log('onLoad');
+export default function PaymentScreen() {
+  const { widgetConfig } = useStore();
+  const { isDarkTheme } = useThemeContext();
+
+  // State to control whether the widge is shown
+  const [isWidgetEnabled, setIsWidgetEnabled] = useState(false);
+
+  // Determine widget theme based on app theme
+  const currentTheme = isDarkTheme ? 'dark' : 'light';
+
+  // Deeplink scheme used for routing back from external services
+  const DEEP_LINK = 'syncroVibeReactCli://';
+
+  // --- Callback: Widget loaded successfully
+  const onWidgetLoad = () => {
+    console.log('Widget loaded');
   };
 
-  const onClose = () => {
-    console.log('onClose');
-    setIsSubmitted(false);
+  // --- Callback: Widget was closed (either manually or automatically)
+  const onWidgetClose = () => {
+    console.log('Widget closed');
+    setIsWidgetEnabled(false);  // Hide widget modal
   };
 
-  const onSuccess = (event: SuccessEventType) => {
-    setoutput(JSON.stringify(event));
-    console.log('onSuccess', event);
-    setIsSubmitted(false);
+  // --- Callback: User successfully linked their bank and widget closed
+  const onWidgetSuccess = (event: SuccessEventType) => {
+    console.log('Bank linking successful', event);
+    setIsWidgetEnabled(false);  // Hide widget modal
+
+    // Show a toast to inform the user of success(optional)
+    Toast.show({
+      type: 'success',
+      text1: 'Bank linked successfully!',
+    });
   };
 
-  const onEvent = (event: WidgetEventType) => {
-    console.log('onEvent', event);
+  // --- Callback: Fired on every widget event
+  const onWidgetEvent = (event: WidgetEventType) => {
+    console.log('Widget event:', event);
   };
 
-  const onError = (event: string) => {
-    console.log('onError', event);
+  // --- Callback: Widget encountered an error
+  const onWidgetError = (event: string) => {
+    console.log('Widget error:', event);
   };
 
-  if (isSubmitted) {
-    return (
-      <SafeAreaView>
-        <BankLink
-          token={token}
-          environment={value}
-          onError={onError}
-          onClose={onClose}
-          onEvent={onEvent}
-          onSuccess={onSuccess}
-          onLoad={onLoad}
-          deeplink="testaerosyncsample://"
-          configurationId={configurationId}
-          aeroPassUserUuid={aeroPassUserUuid}
-          style={{
-            width: '100%',
-            height: '100%',
-            opacity: 1,
-            bgColor: '#FFFFFF',
-          }}></BankLink>
-      </SafeAreaView>
-    );
-  } else {
-    return (
-      <SafeAreaView>
-        <View style={styles.container}>
-          <TouchableOpacity>
-            <Text style={styles.OutputTitle}>{output}</Text>
-          </TouchableOpacity>
-          <View style={styles.dropdownView}>
-            <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="select environment*"
-            />
-          </View>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Enter Aerosync token*"
-              onChangeText={token => settoken(token)}
-              placeholderTextColor="#003f5c"
-            />
-          </View>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Enter  configurationId (optional)"
-              onChangeText={configurationId =>
-                setConfigurationId(configurationId)
-              }
-              placeholderTextColor="#003f5c"
-            />
-          </View>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Enter aeroPassUserUuid (optional)"
-              onChangeText={aeroPassUserUuid =>
-                setAeroPassUserUuid(aeroPassUserUuid)
-              }
-              placeholderTextColor="#003f5c"
-            />
-          </View>
-          <TouchableOpacity
-            style={styles.loginBtn}
-            onPress={() => setIsSubmitted(true)}>
-            <Text style={styles.loginText}>Launch Aerosync widget</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    );
+  const showWidget = () =>  {
+    setIsWidgetEnabled(true)
   }
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+
+      {/*
+  			Full-screen modal to display the AeroSync widget to link a bank.
+  			This modal is optional — you can customize or replace it with your own
+        layout/styling as needed.
+			*/}
+      <Modal
+        style={styles.modal}
+        isVisible={isWidgetEnabled}
+        propagateSwipe
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        animationInTiming={600}
+        animationOutTiming={600}
+      >
+        {/* AeroSync Widget: bank linking process */}
+        <AeroSyncWidget
+          onLoad={onWidgetLoad}
+          onError={onWidgetError}
+          onClose={onWidgetClose}
+          onEvent={onWidgetEvent}
+          onSuccess={onWidgetSuccess}
+          token={widgetConfig?.token!}
+          deeplink={DEEP_LINK}
+          theme={currentTheme}
+          consumerId={widgetConfig?.configurationId}
+          environment={widgetConfig?.environment!}
+          customWebViewProps={{
+            style: { marginTop: 30, backgroundColor: isDarkTheme ? '#000000' : '#FFFFFF' }
+          }}
+        />
+      </Modal>
+
+      {/* Main content area */}
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={styles.title}>Select a payment method</Text>
+          <Button mode="contained"  style={styles.linkButton} onPress={showWidget}>
+                Link new bank
+          </Button>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    height: '100%',
-  },
-  image: {
-    marginBottom: 40,
-    width: '25%',
-    height: '15%',
-  },
-  inputView: {
-    borderWidth: 1,
-    borderRadius: 5,
-    width: '70%',
-    height: 45,
-    marginBottom: 20,
-  },
-  dropdownView: {
-    width: '70%',
-    height: 45,
-    marginBottom: 20,
-    zIndex: 100,
-  },
-  TextInput: {
-    color: 'black',
-    height: 50,
     flex: 1,
-    marginLeft: 20,
+    padding: 20,
+    justifyContent: 'flex-start',
+    backgroundColor: '#fff',
   },
-  forgot_button: {
-    height: 30,
-    marginBottom: 30,
-  },
-  OutputTitle: {
-    color: 'black',
-    height: 100,
-  },
-  loginBtn: {
-    width: '80%',
-    borderRadius: 25,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 40,
-    backgroundColor: '#24c3d2',
-  },
-  loginText: {
-    color: 'black',
+  title: {
+    fontSize: 24,
     fontWeight: 'bold',
-    fontSize: 20,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  linkButton: {
+    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: 60,
+    backgroundColor: '#80bfff'
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
   },
 });
-export default App;
+
 
 ```
 
