@@ -12,8 +12,9 @@ export interface AeroSyncWidgetProps {
   manualLinkOnly?: boolean;
   deeplink: string;
   handleMFA?: boolean;
+  aeroPassUserUuid: string,
   jobId?: string;
-  userId?: string;
+  connectionId?: string;
   stateCode?: string,
   customWebViewProps?: CustomWebViewProps;
   theme?: WidgetThemeType
@@ -31,9 +32,8 @@ export type AeroSyncWebViewProps =
   | { type: 'embedded', props: AeroSyncEmbeddedProps };
 
 export interface SuccessEventType {
-  userId: string;
   connectionId: string;
-  clientName: string;
+  ClientName: string;
   aeroPassUserUuid: string;
 }
 

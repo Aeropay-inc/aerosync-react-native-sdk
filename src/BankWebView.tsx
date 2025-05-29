@@ -28,7 +28,8 @@ export function BankWebView( {type, props}: AeroSyncWebViewProps) {
             manualLinkOnly: props.manualLinkOnly ?? false,
             handleMFA: props.handleMFA,
             jobId: props.jobId,
-            userId: props.userId,
+            aeroPassUserUuid: props.aeroPassUserUuid,
+            connectionId: props.connectionId,
             stateCode: props.stateCode            
         }: {})
     }
