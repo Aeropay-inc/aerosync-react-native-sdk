@@ -33,7 +33,7 @@ export type AeroSyncWebViewProps =
 
 export interface SuccessEventType {
   connectionId: string;
-  ClientName: string;
+  clientName: string;
   aeroPassUserUuid: string;
 }
 
