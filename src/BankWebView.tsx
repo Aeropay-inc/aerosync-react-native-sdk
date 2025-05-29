@@ -5,6 +5,7 @@ import { constructUrl } from './utils/urlUtils';
 import { useEffect, useRef } from 'react';
 import AeroSyncSDK from './AeroSyncSDK';
 import { postMessageToWebView } from './utils/webviewHelpers';
+import { AEROSYNC_VERSION } from './constants';
 
 export function BankWebView( {type, props}: AeroSyncWebViewProps) {
     const isWidget = type === 'widget';
@@ -30,7 +31,8 @@ export function BankWebView( {type, props}: AeroSyncWebViewProps) {
             jobId: props.jobId,
             aeroPassUserUuid: props.aeroPassUserUuid,
             connectionId: props.connectionId,
-            stateCode: props.stateCode            
+            stateCode: props.stateCode,
+            version: AEROSYNC_VERSION             
         }: {})
     }
 
