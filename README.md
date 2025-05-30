@@ -120,6 +120,7 @@ export default function PaymentScreen() {
           onEvent={onWidgetEvent}
           onSuccess={onWidgetSuccess}
           token={widgetConfig?.token!}
+          aeroPassUserUuid={widgetConfig?.aeroPassUserUuid!}
           deeplink={DEEP_LINK}
           theme={currentTheme}
           consumerId={widgetConfig?.configurationId}
