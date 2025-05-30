@@ -42,11 +42,13 @@ export default function Widget({onWidgetClose, onBankLink}: AeroSyncWidgetProps)
             theme={isDarkTheme? 'dark' : 'light'}
             token={widgetConfig!.token}
             deeplink={DEEPLINK}
+            aeroPassUserUuid={widgetConfig!.aeroPassUserUuid}
             consumerId={widgetConfig?.configurationId}
             environment={(widgetConfig?.environment ?? 'dev') as Environment}
             {...(widgetConfig?.stateCode ? {stateCode: widgetConfig.stateCode}: {})}
             {...(widgetConfig?.configurationId ? {configurationId: widgetConfig.configurationId}: {})}
-            {...(widgetConfig?.aeroPassUserUuid ? {aeroPassUserUuid: widgetConfig.aeroPassUserUuid}: {})}
+            {...((widgetConfig?.isHandleMFAFlow && widgetConfig?.jobId) ? {jobId: widgetConfig.jobId}: {})}
+            {...((widgetConfig?.isHandleMFAFlow && widgetConfig?.connectionId) ? {connectionId: widgetConfig.connectionId}: {})}
             customWebViewProps={{
               style:{ marginTop: 30, backgroundColor: (isDarkTheme? '#000000': '#FFFFFF') }
             }}
