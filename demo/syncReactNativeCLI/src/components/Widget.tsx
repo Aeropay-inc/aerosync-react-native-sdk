@@ -43,7 +43,7 @@ export default function Widget({onWidgetClose, onBankLink}: AeroSyncWidgetProps)
             token={widgetConfig!.token}
             deeplink={DEEPLINK}
             aeroPassUserUuid={widgetConfig!.aeroPassUserUuid}
-            consumerId={widgetConfig?.configurationId}
+            configurationId={widgetConfig?.configurationId}
             environment={(widgetConfig?.environment ?? 'dev') as Environment}
             {...(widgetConfig?.stateCode ? {stateCode: widgetConfig.stateCode}: {})}
             {...(widgetConfig?.configurationId ? {configurationId: widgetConfig.configurationId}: {})}

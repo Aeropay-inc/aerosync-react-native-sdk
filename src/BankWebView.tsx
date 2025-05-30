@@ -14,7 +14,7 @@ export function BankWebView( {type, props}: AeroSyncWebViewProps) {
     const { 
       token = null, 
       deeplink = null,
-      consumerId = null,
+      configurationId = null,
       theme = 'light',
       environment = 'production',
       onLoad = () => {},
@@ -23,7 +23,7 @@ export function BankWebView( {type, props}: AeroSyncWebViewProps) {
     const urlParameters = {
         token: token,
         deeplink: deeplink,
-        consumerId: consumerId,
+        configurationId: configurationId,
         defaultTheme: theme,
         ...((isWidget) ? {
             manualLinkOnly: props.manualLinkOnly ?? false,

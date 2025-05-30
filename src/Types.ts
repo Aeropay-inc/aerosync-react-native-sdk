@@ -7,7 +7,7 @@ export interface AeroSyncWidgetProps {
   onEvent: (event: WidgetEventType) => void;
   onClose: () => void;
   onSuccess: (event: SuccessEventType) => void;
-  consumerId?: string;
+  configurationId?: string;
   environment: Environment;
   manualLinkOnly?: boolean;
   deeplink: string;
@@ -23,7 +23,7 @@ export interface AeroSyncWidgetProps {
 export type CustomWebViewProps = Omit<WebViewProps, HiddenWebViewProps>
 
 export type AeroSyncEmbeddedProps = Pick<AeroSyncWidgetProps,
-  'token' | 'onLoad' | 'onError' | 'consumerId' | 'environment' | 'deeplink' | 'theme'> & {
+  'token' | 'onLoad' | 'onError' | 'configurationId' | 'environment' | 'deeplink' | 'theme'> & {
     onBankClick: (event: WidgetEventBankClickType) => void;
   }
 

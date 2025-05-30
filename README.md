@@ -123,7 +123,7 @@ export default function PaymentScreen() {
           aeroPassUserUuid={widgetConfig?.aeroPassUserUuid!}
           deeplink={DEEP_LINK}
           theme={currentTheme}
-          consumerId={widgetConfig?.configurationId}
+          configurationId={widgetConfig?.configurationId}
           environment={widgetConfig?.environment!}
           customWebViewProps={{
             style: { marginTop: 30, backgroundColor: isDarkTheme ? '#000000' : '#FFFFFF' }
