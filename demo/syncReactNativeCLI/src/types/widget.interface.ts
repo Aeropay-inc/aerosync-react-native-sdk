@@ -25,7 +25,7 @@ export interface StoreProviderProps {
 
 export type AeroSyncWidgetProps = {
     onWidgetClose: () => void;
-    onBankLink: () => void;
+    onBankLink: (data: string) => void;
 }
 
 export type EmbeddedWidgetProps = {

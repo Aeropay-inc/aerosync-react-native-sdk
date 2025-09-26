@@ -21,7 +21,7 @@ export default function Widget({onWidgetClose, onBankLink}: AeroSyncWidgetProps)
     
       const onSuccess = (event: SuccessEventType) => {
         console.log('onSuccess', event);
-        onBankLink?.();
+        onBankLink?.(JSON.stringify(event));
       };
     
       const onEvent = (event: WidgetEventType) => {
