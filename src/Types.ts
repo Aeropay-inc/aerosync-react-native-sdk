@@ -31,10 +31,10 @@ export type AeroSyncWebViewProps =
   | { type: 'embedded', props: AeroSyncEmbeddedProps };
 
 export interface SuccessEventType {
-  userId: string;
-  connectionId: string;
-  clientName: string;
-  aeroPassUserUuid: string;
+  user_id: string;
+  user_password: string;
+  ClientName: string;
+  FILoginAcctId: string | number;
 }
 
 export interface WidgetEventType {
