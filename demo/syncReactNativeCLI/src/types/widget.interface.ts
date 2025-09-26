@@ -8,6 +8,9 @@ export interface WidgetConfigType {
     aeroPassUserUuid: string
     isEmbeddedFlow: boolean
     stateCode?: string
+    handleMFA?: boolean
+    jobId?: string
+    userId?: string
 }
 
 export interface StoreContextType {

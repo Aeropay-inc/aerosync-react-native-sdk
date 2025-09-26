@@ -14,8 +14,12 @@ export default function SettingScreen() {
   const [token, setToken] = useState<string>('');
   const [configId, setConfigId] = useState<string>('');
   const [aeroPassId, setAeroPassId] = useState<string>('');
+  const [jobId, setJobId] = useState<string>('');
+  const [userId, setUserId] = useState<string>('');
   const [isSwitchOn, setIsSwitchOn] = useState<boolean>(false);
+  const [handleMFA, setHandleMFA] = useState<boolean>(false);
   const toggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+  const toggleHandleMFA = () => setHandleMFA(!handleMFA);
   const envItems = Object.entries(env).map(([key, value]) => ({
     label: `${key.toUpperCase()}`,
     value: key,
@@ -35,6 +39,9 @@ export default function SettingScreen() {
       configurationId: configId,
       aeroPassUserUuid: aeroPassId,
       isEmbeddedFlow: isSwitchOn,
+      jobId: jobId,
+      userId: userId,
+      handleMFA: handleMFA,
     };
     // Set widget config in context
     setWidgetConfigAction(newConfig);
@@ -72,6 +79,30 @@ export default function SettingScreen() {
             style={styles.input}
           />
         </View>
+
+        {/* jobId */}
+        {handleMFA && <View style={styles.formElement}>
+          <Text variant="bodyLarge">Job Id</Text>
+          <TextInput
+            value={jobId}
+            onChangeText={setJobId}
+            mode="outlined"
+            style={styles.input}
+          />
+        </View>
+        }
+
+        {/* userId */}
+        {handleMFA && <View style={styles.formElement}>
+          <Text variant="bodyLarge">User Id</Text>
+          <TextInput
+            value={userId}
+            onChangeText={setUserId}
+            mode="outlined"
+            style={styles.input}
+          />
+        </View>
+        }
 
         {/* aeropassId
             <View style={styles.formElement}>
@@ -128,6 +159,13 @@ export default function SettingScreen() {
         <View style={styles.formSwitchElement}>
           <Text variant="bodyLarge" style={styles.formSwitchElementLabel}>Embedded View ?</Text>
           <Switch value={isSwitchOn} onValueChange={toggleSwitch} />
+        </View>
+
+
+        {/* handleMFA */}
+        <View style={styles.formSwitchElement}>
+          <Text variant="bodyLarge" style={styles.formSwitchElementLabel}>handle MFA ?</Text>
+          <Switch value={handleMFA} onValueChange={toggleHandleMFA} />
         </View>
 
         <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>
