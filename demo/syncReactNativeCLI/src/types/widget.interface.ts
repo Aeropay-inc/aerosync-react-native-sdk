@@ -8,6 +8,9 @@ export interface WidgetConfigType {
     aeroPassUserUuid: string
     isEmbeddedFlow: boolean
     stateCode?: string
+    handleMFA?: boolean
+    jobId?: string
+    userId?: string
 }
 
 export interface StoreContextType {
@@ -25,7 +28,7 @@ export interface StoreProviderProps {
 
 export type AeroSyncWidgetProps = {
     onWidgetClose: () => void;
-    onBankLink: () => void;
+    onBankLink: (data: string) => void;
 }
 
 export type EmbeddedWidgetProps = {
