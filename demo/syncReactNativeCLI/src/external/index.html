@@ -132,15 +132,17 @@
     function linkBank() {
       const isInApp = window.workflow === 'inAppBrowser';
       const outOfApp = window.workflow === 'systemBrowser';
+      const DEEPLINK = 'syncrovibereactcli://';
       try {
         const cfg = window.__WIDGET_CONFIG__ || {};
         console.log('Injected __WIDGET_CONFIG__', cfg);
         const widgetControls = window?.aerosync?.initWidget({
           elementId: 'widgetId', // ID of the DOM element where the widget will be attached
           iframeTitle: 'Connect', // Title for the iframe
-          environment: cfg.environment || 'qa', // Widget environment
+          environment: (cfg.environment === 'dev') ? 'qa' : cfg.environment, // Widget environment
           token: cfg.token || '', //  AeroSync token (Important: Do not use an AeroPay token)
-          aeroPassUserUuid: cfg.aeroPassUserUuid || '', // Aeropass user id
+          deeplink: DEEPLINK,
+          // aeroPassUserUuid: cfg.aeroPassUserUuid || '', // Aeropass user id
           // configurationId maps to consumerId in web widget
           ...(cfg.configurationId ? { consumerId: cfg.configurationId } : {}),
           ...(cfg.stateCode ? { stateCode: cfg.stateCode } : {}),

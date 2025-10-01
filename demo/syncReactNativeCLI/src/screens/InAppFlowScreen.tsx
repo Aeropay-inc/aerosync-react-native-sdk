@@ -5,6 +5,9 @@ import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { useStore } from '../context/StoreContext';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRef } from 'react';
+import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+import { Linking } from 'react-native';
+import { Platform } from 'react-native';
 
 // Build a URL with query params based on key/value pairs
 export function buildUrlWithParams(
@@ -34,15 +37,45 @@ export default function InAppFlowScreen() {
     const { widgetConfig } = useStore();
     const webViewRef = useRef<WebView>(null);
 
-    const onMessage = useCallback((event: WebViewMessageEvent) => {
+    const onWebViewMessage = async (event: any) => {
         try {
             const data = JSON.parse(event.nativeEvent.data);
-            // You can add more robust routing/handling here if needed
-            console.log('[WebView message]', data);
-        } catch (_err) {
-            console.log('[WebView message]', event.nativeEvent.data);
+
+            /*
+             * If the workflow is inAppBrowser, open the widgetUrl in inAppBrowser
+             */
+            if (data.type === 'inAppBrowser' && data.url) {
+                const targetUrl = data.url;
+
+                try {
+                    const available = await InAppBrowser.isAvailable();
+
+                    if (available) {
+                        // inappbrowser openAuth
+                        await InAppBrowser.open(targetUrl, {
+                            dismissButtonStyle: 'close',
+                            animated: true,
+                            showInRecents: true,
+                            modalEnabled: true,
+                            enableBarCollapsing: true,
+                            showTitle: true,
+                            forceCloseOnRedirection: false,
+                            toolbarColor: Platform.OS === 'android' ? '#ffffff' : undefined,
+                        });
+                    } else {
+                        Linking.openURL(targetUrl);
+                    }
+                } catch (err) {
+                    console.warn('Failed to open InAppBrowser, falling back to Linking:', err);
+                    Linking.openURL(targetUrl);
+                }
+            } else {
+                console.warn('Invalid message from WebView:', data);
+            }
+        } catch (error) {
+            console.error('Invalid message from WebView:', error);
         }
-    }, []);
+    };
 
     // Prepare a string to inject the widgetConfig into the window before content loads
     const injectedConfig = useMemo(() => {
@@ -79,22 +112,22 @@ export default function InAppFlowScreen() {
 
     // On screen focus, push the latest store values into the already-mounted WebView (no reload)
     useFocusEffect(
-      useCallback(() => {
-        const latest = widgetConfig ? {
-          token: widgetConfig.token,
-          environment: widgetConfig.environment,
-          configurationId: widgetConfig.configurationId,
-          aeroPassUserUuid: widgetConfig.aeroPassUserUuid,
-          isEmbeddedFlow: widgetConfig.isEmbeddedFlow,
-          isHandleMFAFlow: widgetConfig.isHandleMFAFlow,
-          stateCode: widgetConfig.stateCode,
-          jobId: widgetConfig.jobId,
-          connectionId: widgetConfig.connectionId,
-        } : {};
-        const js = `try{window.__SET_WIDGET_CONFIG__ && window.__SET_WIDGET_CONFIG__(${JSON.stringify(latest)});}catch(e){}`;
-        // Allow the WebView to be ready before injection
-        setTimeout(() => webViewRef.current?.injectJavaScript(js), 0);
-      }, [widgetConfig])
+        useCallback(() => {
+            const latest = widgetConfig ? {
+                token: widgetConfig.token,
+                environment: widgetConfig.environment,
+                configurationId: widgetConfig.configurationId,
+                aeroPassUserUuid: widgetConfig.aeroPassUserUuid,
+                isEmbeddedFlow: widgetConfig.isEmbeddedFlow,
+                isHandleMFAFlow: widgetConfig.isHandleMFAFlow,
+                stateCode: widgetConfig.stateCode,
+                jobId: widgetConfig.jobId,
+                connectionId: widgetConfig.connectionId,
+            } : {};
+            const js = `try{window.__SET_WIDGET_CONFIG__ && window.__SET_WIDGET_CONFIG__(${JSON.stringify(latest)});}catch(e){}`;
+            // Allow the WebView to be ready before injection
+            setTimeout(() => webViewRef.current?.injectJavaScript(js), 0);
+        }, [widgetConfig])
     );
 
     return (
@@ -105,7 +138,7 @@ export default function InAppFlowScreen() {
                     source={require('../external/index.html')}
                     style={styles.webview}
                     originWhitelist={['*']}
-                    onMessage={onMessage}
+                    onMessage={onWebViewMessage}
                     injectedJavaScriptBeforeContentLoaded={injectedConfig}
                     javaScriptEnabled
                     domStorageEnabled
