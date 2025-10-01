@@ -2,6 +2,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from '../screens/HomeScreen';
 import SettingScreen from '../screens/SettingScreen';
 import PaymentScreen from '../screens/PaymentScreen';
+import InAppFlowScreen from '../screens/InAppFlowScreen';
 import Icon from "@react-native-vector-icons/fontawesome6";
 import { View } from "react-native";
 import { Support } from "../components/Support";
@@ -59,6 +60,18 @@ export const Dashboard = () => {
         component={PaymentScreen} options={{
         drawerIcon: ({ focused, size}) => (
           <Icon name="credit-card" iconStyle="solid" size={size} color={focused ? '#00BFFF': 'gray'} />
+        ),
+        drawerLabelStyle: {
+          color: 'white', 
+          fontWeight: 'bold'
+        },
+        headerRight: () => HeaderRight
+      }} />
+      <Drawer.Screen 
+        name="In-App Flow" 
+        component={InAppFlowScreen} options={{
+        drawerIcon: ({ focused, size}) => (
+          <Icon name="cart-shopping" iconStyle="solid" size={size} color={focused ? '#00BFFF': 'gray'} />
         ),
         drawerLabelStyle: {
           color: 'white', 
