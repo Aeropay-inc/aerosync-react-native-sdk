@@ -59,7 +59,7 @@ export default function InAppFlowScreen() {
                             modalEnabled: true,
                             enableBarCollapsing: true,
                             showTitle: true,
-                            forceCloseOnRedirection: false,
+                            forceCloseOnRedirection: true,
                             toolbarColor: Platform.OS === 'android' ? '#ffffff' : undefined,
                         });
                     } else {

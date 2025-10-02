@@ -142,11 +142,10 @@
           environment: (cfg.environment === 'dev') ? 'qa' : cfg.environment, // Widget environment
           token: cfg.token || '', //  AeroSync token (Important: Do not use an AeroPay token)
           deeplink: DEEPLINK,
-          // aeroPassUserUuid: cfg.aeroPassUserUuid || '', // Aeropass user id
+          aeroPassUserUuid: cfg.aeroPassUserUuid || '', // Aeropass user id
           // configurationId maps to consumerId in web widget
           ...(cfg.configurationId ? { consumerId: cfg.configurationId } : {}),
           ...(cfg.stateCode ? { stateCode: cfg.stateCode } : {}),
-          ...(isInApp && { deeplink: 'aerodonutapp://' }),
           handleOAuthManually: true,
 
           // Event callback for various widget lifecycle events
