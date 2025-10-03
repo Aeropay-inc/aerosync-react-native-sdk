@@ -135,7 +135,8 @@ export default function InAppFlowScreen() {
             <View style={styles.webContainer}>
                 <WebView
                     ref={webViewRef}
-                    source={require('../external/index.html')}
+                    // source={require('../external/index.html')}
+                    source={{ uri: 'https://release-react-native-host-app.d2ofepkh8ywahi.amplifyapp.com'}}
                     style={styles.webview}
                     originWhitelist={['*']}
                     onMessage={onWebViewMessage}
