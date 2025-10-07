@@ -107,6 +107,13 @@ android {
     }
 }
 
+// Ensure transitive dependencies use a compatible androidx.browser version
+configurations.all {
+    resolutionStrategy {
+        force 'androidx.browser:browser:1.8.0'
+    }
+}
+
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
@@ -116,4 +123,14 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Force a compatible androidx.browser version with AGP 8.8.2 and compileSdk 35
+    constraints {
+        implementation("androidx.browser:browser:1.8.0") {
+            because("1.10.0-alpha01 requires AGP 8.9.1+ and compileSdk 36+")
+        }
+    }
+
+    // Explicitly depend on a stable, compatible browser version
+    implementation("androidx.browser:browser:1.8.0")
 }
