@@ -25,14 +25,14 @@ export default function PaymentScreen() {
             });
         return null;
       };     
-      if (!widgetConfig?.aeroPassUserUuid) {
-        Toast.show({
-            type: 'error',
-            text1: 'Oops! It looks like you haven’t set your AeroPass UserId yet.',
-            text2: 'Head over to the Settings page to add it.'
-            });
-        return null;
-      };            
+      // if (!widgetConfig?.aeroPassUserUuid) {
+      //   Toast.show({
+      //       type: 'error',
+      //       text1: 'Oops! It looks like you haven’t set your AeroPass UserId yet.',
+      //       text2: 'Head over to the Settings page to add it.'
+      //       });
+      //   return null;
+      // };            
       setIsWidgetEnabled(true)
     }
 
