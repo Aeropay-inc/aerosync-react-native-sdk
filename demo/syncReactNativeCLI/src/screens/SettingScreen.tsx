@@ -34,13 +34,13 @@ export default function SettingScreen() {
       });
       return
     }
-    if (aeroPassId.trim() === '') {
-      Toast.show({
-        type: 'error',
-        text1: 'Aeropass Id is required!'
-      });
-      return
-    }
+    // if (aeroPassId.trim() === '') {
+    //   Toast.show({
+    //     type: 'error',
+    //     text1: 'Aeropass Id is required!'
+    //   });
+    //   return
+    // }
     const newConfig = {
       token: token,
       environment: (selectedEnv || 'dev') as Environment,
@@ -101,7 +101,7 @@ export default function SettingScreen() {
 
           {/* aeropassId */}
           <View style={styles.formElement}>
-            <Text variant="bodyLarge">AeroPass Id*</Text>
+            <Text variant="bodyLarge">AeroPass Id</Text>
             <TextInput
               value={aeroPassId}
               onChangeText={setAeroPassId}
