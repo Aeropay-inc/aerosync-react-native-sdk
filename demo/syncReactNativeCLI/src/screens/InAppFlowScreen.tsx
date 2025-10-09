@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
@@ -67,7 +67,7 @@ export default function InAppFlowScreen() {
                     }
                 } catch (err) {
                     console.warn('Failed to open InAppBrowser, falling back to Linking:', err);
-                    Linking.openURL(targetUrl);
+                    // Linking.openURL(targetUrl);
                 }
             } else {
                 console.warn('Invalid message from WebView:', data);
@@ -129,6 +129,31 @@ export default function InAppFlowScreen() {
             setTimeout(() => webViewRef.current?.injectJavaScript(js), 0);
         }, [widgetConfig])
     );
+
+    useEffect(() => {
+        const handleDeepLink = (event: { url: string }) => {
+          console.log('Deep link triggered:', event.url);
+      
+          // Close InAppBrowser if it's open
+          if (InAppBrowser.close) {
+            InAppBrowser.close();
+          }
+        };
+
+          // 1. Handle cold start (initial URL)
+            Linking.getInitialURL().then(url => {
+                if (url) {
+                handleDeepLink({ url });
+                }
+            });
+      
+        const subscription = Linking.addEventListener('url', handleDeepLink);
+
+      
+        return () => {
+          subscription.remove();
+        };
+      }, []);
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
