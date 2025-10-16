@@ -48,6 +48,7 @@ export default function Widget({ onWidgetClose, onBankLink }: AeroSyncWidgetProp
       {...(widgetConfig?.configurationId ? { configurationId: widgetConfig.configurationId } : {})}
       {...((widgetConfig?.isHandleMFAFlow && widgetConfig?.jobId) ? { jobId: widgetConfig.jobId } : {})}
       {...((widgetConfig?.isHandleMFAFlow && widgetConfig?.connectionId) ? { connectionId: widgetConfig.connectionId } : {})}
+      {...((widgetConfig?.isHandleMFAFlow ) ? { handleMFA: true } : {})}
       customWebViewProps={{
         style: { marginTop: 30, backgroundColor: (isDarkTheme ? '#000000' : '#FFFFFF') }
       }}
