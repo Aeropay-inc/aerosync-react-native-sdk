@@ -47,7 +47,9 @@ export default function SettingScreen() {
       configurationId: configId,
       aeroPassUserUuid: aeroPassId,
       isEmbeddedFlow: isEmbeddedSwitchOn,
-      isHandleMFAFlow: isHandleMFASwitchOn
+      isHandleMFAFlow: isHandleMFASwitchOn,
+      jobId: jobId,
+      connectionId: connectionId
     };
     // Set widget config in context
     setWidgetConfigAction(newConfig);
