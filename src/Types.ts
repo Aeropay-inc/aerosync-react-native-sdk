@@ -6,7 +6,7 @@ export interface AeroSyncWidgetProps {
   onError: (event: string) => void;
   onEvent: (event: WidgetEventType) => void;
   onClose: () => void;
-  onSuccess: (event: SuccessEventType) => void;
+  onSuccess: (event: SuccessPayload) => void;
   configurationId?: string;
   environment: Environment;
   manualLinkOnly?: boolean;
@@ -31,11 +31,29 @@ export type AeroSyncWebViewProps =
   | { type: 'widget', props: AeroSyncWidgetProps }
   | { type: 'embedded', props: AeroSyncEmbeddedProps };
 
+// single-account success (AeroPass returning user + AeroPass link-new-bank)
 export interface SuccessEventType {
   connectionId: string;
   clientName: string;
   aeroPassUserUuid: string;
 }
+
+// one linked account in the multi-account success payload
+export interface SuccessAccountType {
+  connectionId: string;
+  accountType: string;
+  accountNumberDisplay: string;
+}
+
+// multi-account success (enable_multiple_account_linking)
+export interface MultiAccountSuccessEventType {
+  accounts: SuccessAccountType[];
+  clientName: string;
+  aeroPassUserUuid: string;
+}
+
+// onSuccess payload: single-account or multi-account
+export type SuccessPayload = SuccessEventType | MultiAccountSuccessEventType;
 
 export interface WidgetEventType {
   pageTitle: string;
