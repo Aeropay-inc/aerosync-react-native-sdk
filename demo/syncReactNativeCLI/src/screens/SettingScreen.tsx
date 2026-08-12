@@ -43,7 +43,7 @@ export default function SettingScreen() {
     // }
     const newConfig = {
       token: token,
-      environment: (selectedEnv || 'dev') as Environment,
+      environment: (selectedEnv || 'sandbox') as Environment,
       configurationId: configId,
       aeroPassUserUuid: aeroPassId,
       isEmbeddedFlow: isEmbeddedSwitchOn,

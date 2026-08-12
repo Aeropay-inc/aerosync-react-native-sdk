@@ -64,12 +64,10 @@ export interface WidgetEventBankClickType {
   stateCode: string
 }
 
-export type Environment = 'dev' | 'staging' | 'sandbox' | 'production';
+export type Environment = 'sandbox' | 'production';
 
 export const env: { [key in Environment]: string } = {
-  dev: 'https://qa-sync.aero.inc',
-  staging: 'https://staging-sync.aero.inc',
-  sandbox: 'https://sandbox.aerosync.com',
+  sandbox: 'https://sandbox-sync.aero.inc',
   production: 'https://sync.aero.inc',
 };
 

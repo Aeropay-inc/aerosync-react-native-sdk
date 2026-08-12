@@ -36,7 +36,7 @@ export default function Embedded({onWidgetBankClick}: EmbeddedWidgetProps) {
             theme={isDarkTheme? 'dark' : 'light'}
             token={widgetConfig!.token}
             deeplink={DEEPLINK}
-            environment={(widgetConfig?.environment ?? 'dev') as Environment}
+            environment={(widgetConfig?.environment ?? 'sandbox') as Environment}
             {...(widgetConfig?.configurationId ? {configurationId: widgetConfig.configurationId}: {})}
         />
     );
