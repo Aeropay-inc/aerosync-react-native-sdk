@@ -4,3 +4,33 @@ extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autoli
 rootProject.name = 'syncReactNativeCLI'
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
+
+// Windows MAX_PATH workaround for native (CMake/ninja) builds.
+//
+// The ninja bundled with Android SDK cmake 3.22.1 is 1.10.2, which is not long-path
+// aware. Object paths under a module's .cxx dir mirror the absolute source path, so
+// react-native-reanimated lands at ~261 chars and ninja fails a cold native build with
+// "mkdir(...): No such file or directory". Setting LongPathsEnabled in the registry
+// does not help, because it is ninja itself that lacks the long-path manifest.
+//
+// Relocating the CMake staging dir to a short root cuts ~80 chars off every object path;
+// CMAKE_OBJECT_PATH_MAX makes CMake hash long dirs instead of mirroring the source tree.
+// This has to run from settings.gradle: by the time the root build.gradle is evaluated,
+// AGP has already read buildStagingDirectory and rejects the change.
+// Override the root with ANDROID_CXX_ROOT if C:/cxx is unsuitable.
+if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+    def shortCxxRoot = System.getenv("ANDROID_CXX_ROOT") ?: "C:/cxx"
+    gradle.beforeProject { project ->
+        ["com.android.application", "com.android.library"].each { pluginId ->
+            project.plugins.withId(pluginId) {
+                def androidExt = project.extensions.findByName("android")
+                if (androidExt != null) {
+                    androidExt.externalNativeBuild.cmake.buildStagingDirectory =
+                        new File("${shortCxxRoot}/${project.name}")
+                    androidExt.defaultConfig.externalNativeBuild.cmake.arguments.add(
+                        "-DCMAKE_OBJECT_PATH_MAX=200")
+                }
+            }
+        }
+    }
+}

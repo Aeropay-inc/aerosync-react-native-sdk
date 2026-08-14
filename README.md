@@ -33,7 +33,7 @@ pod install`
 
 import {
   AeroSyncWidget,
-  SuccessEventType,
+  SuccessPayload,
   WidgetEventType,
 } from "aerosync-react-native-sdk";
 
@@ -69,9 +69,17 @@ export default function PaymentScreen() {
     setIsWidgetEnabled(false);  // Hide widget modal
   };
 
-  // --- Callback: User successfully linked their bank and widget closed
-  const onWidgetSuccess = (event: SuccessEventType) => {
+  // --- Callback: User successfully linked their bank(s) and widget closed
+  // `event` is a union: single-account, or multi-account when the client has
+  // multi-account linking enabled (then `accounts[]` is always returned, even
+  // for one account). Narrow with `"accounts" in event`.
+  const onWidgetSuccess = (event: SuccessPayload) => {
     console.log('Bank linking successful', event);
+    if ('accounts' in event) {
+      // multi-account: event.accounts = [{ connectionId, accountType, accountNumberDisplay }]
+    } else {
+      // single account: event.connectionId
+    }
     setIsWidgetEnabled(false);  // Hide widget modal
 
     // Show a toast to inform the user of success(optional)
